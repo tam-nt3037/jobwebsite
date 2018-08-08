@@ -20,6 +20,10 @@
     <section class="post-area section-gap">
         <div class="container">
             <div class="row justify-content-center d-flex">
+
+                        {{--Start get data for details info--}}
+                @if((count($post_news)) > 0)
+                    @foreach($post_news as $post)
                 <div class="col-lg-8 post-list">
                     <div class="single-post d-flex flex-row">
                         <div class="thumb">
@@ -39,8 +43,8 @@
                         <div class="details">
                             <div class="title d-flex flex-row justify-content-between">
                                 <div class="titles">
-                                    <a href="#"><h4>Creative Art Designer</h4></a>
-                                    <h6>Premium Labels Limited</h6>					
+                                    <a href="#"><h4>{{$post->job_title}}</h4></a>
+                                    <h6>{{$post->company_name}}</h6>
                                 </div>
                                 <ul class="btns">
                                     <li><a href="#"><span class="lnr lnr-heart"></span></a></li>
@@ -48,49 +52,45 @@
                                 </ul>
                             </div>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temporinc ididunt ut dolore magna aliqua.
+                                {{$post->description_work}}
                             </p>
-                            <h5>Job Nature: Full time</h5>
-                            <p class="address"><span class="lnr lnr-map"></span> 56/8, Panthapath Dhanmondi Dhaka</p>
-                            <p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
+                            <h5>Job Nature: {{$post->name_type_work}}</h5>
+                            <p class="address"><span class="lnr lnr-map"></span> {{$post->location_work}}</p>
+                            <p class="address"><span class="lnr lnr-database"></span> {{$post->name_level_salary}}</p>
+                            <p class="address"><span class="lnr lnr-clock"></span> Time for submisstion: <b>{{$post->time_for_submission}}</b></p>
+                            <p class="address"><span class="lnr lnr-shirt"></span> Number of recruitment: <b>{{$post->number_recruits }}</b> people</p>
+                            <p class="address"><span class="lnr lnr-user"></span> Gender : {{$post->gender }} </p>
                         </div>
-                    </div>	
+                    </div>
+                    <div class="single-post job-details">
+                        <h4 class="single-title"> WHAT WE CAN OFFER</h4>
+                        <p>
+                            {{$post->benefit}}
+                        </p>
+                    </div>
                     <div class="single-post job-details">
                         <h4 class="single-title">Whom we are looking for</h4>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.
+                            <img src="{{ asset('img/pages/list.jpg') }}" alt="">
+                            <span>{{$post->description_work}}</span>
                         </p>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </p>
+                    </div>
+                    <div class="single-post job-experience">
+                        <h4 class="single-title">Job Requirements</h4>
+                        <ul>
+                            <li>
+                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
+                                <span>{{$post->require_work}}</span>
+                            </li>
+                        </ul>
                     </div>
                     <div class="single-post job-experience">
                         <h4 class="single-title">Experience Requirements</h4>
                         <ul>
                             <li>
                                 <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
+                                <span>Above {{$post->id_year_experience}} years relevant experience in work</span>
                             </li>
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>	
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>																											
                         </ul>
                     </div>
                     <div class="single-post job-experience">
@@ -98,20 +98,8 @@
                         <ul>
                             <li>
                                 <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
+                                <span></span>
                             </li>
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>	
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>													
                         </ul>
                     </div>	
                     <div class="single-post job-experience">
@@ -121,20 +109,60 @@
                                 <img src="{{ asset('img/pages/list.jpg') }}" alt="">
                                 <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
                             </li>
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>
-                            <li>
-                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                            </li>																										
                         </ul>
-                    </div>														
+                    </div>
+                    <div class="single-post job-experience">
+                        <h4 class="single-title">Profile Requirements</h4>
+                        <ul>
+                            <li>
+                                <img src="{{ asset('img/pages/list.jpg') }}" alt="">
+                                <span>Require for profile: {{$post->require_profile}}</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
+                        {{--End get data for details info--}}
+
                 {{-- #sidebar --}}
-                @include('inc.sidebar')
+                <div class="col-lg-4 sidebar">
+                    <div class="single-slidebar">
+                        <h4><hr></h4>
+                        <ul class="cat-list">
+                            <li><a class="justify-content-between d-flex"><p>POSTED DATE</p><span>{{ date('d - m - Y',strtotime($post->date_posted)) }}</span></a></li>
+                            <hr>
+                        </ul>
+                        <ul class="cat-list">
+                            <li><a class="justify-content-between d-flex"><p>JOB LEVEL</p><span>{{$post->name_level}}</span></a></li>
+                            <hr>
+                        </ul>
+                        <ul class="cat-list">
+                            <li><a class="justify-content-between d-flex"><p>JOB CATEGORY</p></a></li>
+                        </ul>
+                        <ul class="cat-list">
+                            <li><a class="justify-content-between d-flex"><p></p><span>{{$post->name_job_category}}</span></a>
+
+                        </ul>
+                        <hr>
+                        <ul class="cat-list">
+                            <li><a class="justify-content-between d-flex"><p>SKILL</p><span></span></a></li>
+                        </ul>
+                        <ul class="cat-list">
+                            <li><a class="justify-content-between d-flex"><p></p><span>{{$post->skills}}</span></a>
+                        </ul>
+                        <hr>
+                        <ul class="cat-list">
+                            <li><a class="justify-content-between d-flex"><p>PREFERRED LANGUAGE</p><span>{{$post->name_languages_profile}}</span></a></li>
+                        </ul>
+                        <hr>
+                    </div>
+                </div>
+                    @endforeach
+                @endif
+                {{-- #end sidebar --}}
+
+                {{-- #sidebar --}}
+                {{--@include('inc.sidebar')--}}
                 {{-- #end sidebar --}}
                 
             </div>

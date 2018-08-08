@@ -22,8 +22,7 @@ Route::get('/category','UserController@category');
 Route::get('/contact','UserController@contact');
 Route::get('/blog','UserController@blog');
 Route::get('/search','UserController@search');
-Route::get('/details','UserController@details');
-
+Route::get('/details/{id}','UserController@details');
 
 
 
