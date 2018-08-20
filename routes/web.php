@@ -24,6 +24,7 @@ Route::get('/blog','UserController@blog');
 Route::get('/search','UserController@search');
 Route::get('/details/{id}','UserController@details');
 
+Route::post('/applyJob','UserController@applyJob');
 
 
 Auth::routes();

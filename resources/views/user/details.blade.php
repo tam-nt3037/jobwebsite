@@ -14,10 +14,12 @@
             </div>
         </div>
     </section>
-    <!-- End banner Area -->	
-        
+    <!-- End banner Area -->
+
+
     <!-- Start post Area -->
     <section class="post-area section-gap">
+        @include('inc.messages')
         <div class="container">
             <div class="row justify-content-center d-flex">
 
@@ -42,14 +44,133 @@
                         </div>
                         <div class="details">
                             <div class="title d-flex flex-row justify-content-between">
-                                <div class="titles">
-                                    <a href="#"><h4>{{$post->job_title}}</h4></a>
-                                    <h6>{{$post->company_name}}</h6>
+                                <div class="col-md-8 col-sm-8">
+                                    <div class="titles">
+                                        <a href="#"><h4>{{$post->job_title}}</h4></a>
+                                        <h6>{{$post->company_name}}</h6>
+                                    </div>
                                 </div>
-                                <ul class="btns">
-                                    <li><a href="#"><span class="lnr lnr-heart"></span></a></li>
-                                    <li><a href="#">Apply</a></li>
-                                </ul>
+                                <div class="col-md-4 col-sm-4">
+                                        <ul class="btns">
+                                            <li style="border:none; background-color: #F9F9FF;"><a href="#"><span class="lnr lnr-heart"></span></a></li>
+
+                                            {{--Start Apply Modal--}}
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                                Apply
+                                            </button>
+                                            <li style="border:none; background-color: #F9F9FF;">
+                                                         <!-- The Modal -->
+                                                <div class="modal fade" id="myModal">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+
+                                                            <!-- Modal Header -->
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">You are applying for {{$post->job_title}}</h4>
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            </div>
+
+                                                            <!-- Modal body -->
+
+                                                            @if(!Auth::guest())
+                                                                {!! Form::open(['action' => 'UserController@applyJob', 'id' => 'ApplyForm' ,'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+                                                                <input type="hidden" name="id_account_recruiter" value="{{$post->id_account_recruiter}}">
+                                                                <input type="hidden" name="id_post" value="{{$post->id_posts}}">
+                                                                @if(count($info_candidate) > 0)
+                                                                    @foreach($info_candidate as $info_c)
+
+                                                                        {{--{{ Form::hidden('id_account_recruiter', $post->id_account_recruiter ) }}--}}
+                                                                        {{--{{ Form::hidden('id_post', $post->id_posts ) }}--}}
+                                                                        <div class="modal-body" style="font-family: Roboto,Helvetica,Verdana,Arial,sans-serif; line-height: 1.21; color: inherit; font-weight: 400;">
+                                                                            <div class="row" style="background-color: #D8F4FC; padding: 15px 0 15px 0; font-size: 18px; border-top: 1px #ace0f0 solid;border-bottom: 1px #ace0f0 solid;">
+                                                                                <div class="col-md-2 col-sm-2"></div>
+                                                                                <div class="col-md-2 col-sm-2"><img src="{{ asset('img/post.png') }}"></div>
+                                                                                <div class="col-md-8 col-sm-8">
+                                                                                    <div><b style="color: #666666;">{{$info_c->last_name}} {{$info_c->first_name}}</b></div>
+                                                                                    <div>{{$info_c->professional_title}}</div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="row" style="padding: 35px 0 0 0;">
+                                                                                <div class="col-md-4 col-sm-4 text-right "><h5 class="font-weight-bold">Email</h5></div>
+                                                                                <div class="col-md-8 col-sm-8"><h5>{{$info_c->email}}</h5></div>
+                                                                            </div>
+                                                                            <div class="row" style="padding: 15px 0 0 0;">
+                                                                                <div class="col-md-4 col-sm-4 text-right "><h5 class="font-weight-bold">Phone number</h5></div>
+                                                                                <div class="col-md-8 col-sm-8"><h5>{{$info_c->phone_number}}</h5></div>
+                                                                            </div>
+                                                                            <div class="row" style="padding: 15px 0 0 0;">
+                                                                                <div class="col-md-4 col-sm-4 text-right "><h5 class="font-weight-bold">Resume</h5></div>
+                                                                                <div class="col-md-8 col-sm-8">
+                                                                                    <form>
+
+                                                                                        {{--
+                                                                                            #TODO
+
+                                                                                            #Example:
+
+                                                                                            $contains = str_contains('This is my name', 'my');
+
+                                                                                            // ==> true
+
+                                                                                        --}}
+
+                                                                                        @if(str_contains($info_c->cv,$info_c->cv))
+                                                                                            <div class="radio">
+                                                                                                <label><input type="radio" name="optradio" checked>  {{$info_c->cv}} <span class="font-weight-light">(Uploaded: {{ date('d/m/Y H:i',strtotime($info_c->datetime_upload_cv)) }})</span></label>
+                                                                                            </div>
+                                                                                        @endif
+                                                                                        <div class="radio">
+                                                                                            <label><input type="radio" name="optradio" onclick="showFormFile()">  Upload new CV <b><span class="lnr lnr-exit-up" style="font-size: medium;"></span></b></label>
+                                                                                            <br>
+                                                                                            {{--<form action="upload.php" method="post" enctype="multipart/form-data">--}}
+                                                                                            <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;">
+                                                                                            {{--</form>--}}
+
+                                                                                            <script>
+                                                                                                function showFormFile() {
+                                                                                                    document.getElementById('fileToUpload').style.display = "block";
+                                                                                                }
+                                                                                            </script>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Modal footer -->
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                            <input type="submit" class="btn btn-primary" onclick="form_submit()" value="Send application"/>
+                                                                        </div>
+                                                                        <script>
+                                                                            function form_submit() {
+                                                                                document.getElementById("ApplyForm").submit();
+                                                                            }
+                                                                        </script>
+
+
+
+
+                                                                    @endforeach
+                                                                @endif
+                                                                {!! Form::close() !!}
+                                                                {{--TODO--}}
+                                                            @else
+                                                                <div class="modal-body">
+                                                                    <div>Please login your account </div>
+                                                                    <button type="submit" class="btn btn-secondary">
+                                                                        <a href="{{ route('login') }}">{{ __('Login') }}</a></button>
+                                                                </div>
+                                                            @endif
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {{--End Apply Modal--}}
+                                            </li>
+                                        </ul>
+                                    </div>
                             </div>
                             <p>
                                 {{$post->description_work}}
@@ -57,7 +178,7 @@
                             <h5>Job Nature: {{$post->name_type_work}}</h5>
                             <p class="address"><span class="lnr lnr-map"></span> {{$post->location_work}}</p>
                             <p class="address"><span class="lnr lnr-database"></span> {{$post->name_level_salary}}</p>
-                            <p class="address"><span class="lnr lnr-clock"></span> Time for submisstion: <b>{{$post->time_for_submission}}</b></p>
+                            <p class="address"><span class="lnr lnr-clock"></span> Time for submission: <b>{{$post->time_for_submission}}</b></p>
                             <p class="address"><span class="lnr lnr-shirt"></span> Number of recruitment: <b>{{$post->number_recruits }}</b> people</p>
                             <p class="address"><span class="lnr lnr-user"></span> Gender : {{$post->gender }} </p>
                         </div>
@@ -140,8 +261,18 @@
                             <li><a class="justify-content-between d-flex"><p>JOB CATEGORY</p></a></li>
                         </ul>
                         <ul class="cat-list">
-                            <li><a class="justify-content-between d-flex"><p></p><span>{{$post->name_job_category}}</span></a>
+                            <li><a class="justify-content-between d-flex"><p id="demo" href=""></p><span></span></a>
 
+                                <div hidden>{{$name = $post->name_job_category}}</div>
+                                <link rel='parent' href='abc.txt' target='_blank'>
+                                <script>
+                                    var js_variable  = '<?php echo $name;?>';
+                                    var res = js_variable.split(" , ");
+                                    res.forEach(function(element) {
+                                        document.getElementById("demo").innerHTML += "<a href='"+ element +"'>" + element + "</a><br/>";
+                                    });
+
+                                </script>
                         </ul>
                         <hr>
                         <ul class="cat-list">
@@ -187,4 +318,5 @@
         </div>	
     </section>
     <!-- End calto-action Area -->
+
 @endsection

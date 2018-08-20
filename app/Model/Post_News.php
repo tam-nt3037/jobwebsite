@@ -15,9 +15,9 @@ class Post_News extends Model
     public $timestamps = true;
 
     public function account_recruiter()
-    {
-        return $this->belongsTo('App\Model\Account_Recruiter');
-    }
+{
+    return $this->belongsTo('App\Model\Account_Recruiter');
+}
     public function recruiter()
     {
         return $this->belongsTo('App\Model\Recruiter','id_account_recruiter','id');

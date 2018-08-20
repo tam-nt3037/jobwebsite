@@ -250,183 +250,106 @@
     <div class="container">
         <div class="row justify-content-center d-flex">
             <div class="col-lg-8 post-list">
-                <ul class="cat-list">
-                    <li><a href="#">Recent</a></li>
-                    <li><a href="#">Full Time</a></li>
-                    <li><a href="#">Intern</a></li>
-                    <li><a href="#">part Time</a></li>
+                {{--<ul class="cat-list">--}}
+                    {{--<li><a href="#">Recent</a></li>--}}
+                    {{--<li><a href="#">Full Time</a></li>--}}
+                    {{--<li><a href="#">Intern</a></li>--}}
+                    {{--<li><a href="#">part Time</a></li>--}}
+                {{--</ul>--}}
+
+                <style>
+                    ul li a:hover{
+                        text-decoration: none;
+                    }
+                </style>
+                <ul class="cat-list" style="">
+                    <li class="active"><a data-toggle="tab" href="#home1">RECENT</a></li>
+                    <li><a data-toggle="tab" href="#menu1">FULL-TIME</a></li>
+                    <li><a data-toggle="tab" href="#menu2">INTERN</a></li>
+                    <li><a data-toggle="tab" href="#menu3">PART-TIME</a></li>
                 </ul>
 
-                {{--Recent--}}
-                @if((count($post_news)) > 0)
-                    @foreach($post_news as $post)
-                        <div class="single-post d-flex flex-row">
-                            <div class="thumb">
-                                <img src="{{ asset('img/post.png') }}" alt="">
-                                <ul class="tags">
-                                    <li>
-                                        <a href="#">Art</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Media</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Design</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="details">
-                                <div class="title d-flex flex-row justify-content-between">
-                                    <div class="titles">
-                                        <a href="/details/{{$post->id}}"><h4>{{ $post->job_title}}</h4></a>
-                                            <h6> {{ $post->company_name}}</h6>
+                <div class="tab-content">
+                    <div id="home1" class="tab-pane fade in active">
+                        {{--Recent--}}
+                        @if((count($post_news_by_date)) > 0)
+                            @foreach($post_news_by_date as $post_date)
+                                <div class="single-post d-flex flex-row">
+                                    <div class="thumb">
+                                        <img src="{{ asset('img/post.png') }}" alt="">
+                                        <ul class="tags">
+                                            <li>
+                                                <a href="#">Art</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Media</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Design</a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <ul class="btns">
-                                        <li><a href="#"><span class="lnr lnr-heart"></span></a></li>
-                                        <li><a href="#">Apply</a></li>
-                                    </ul>
+                                    <div class="details">
+                                        <div class="title d-flex flex-row justify-content-between">
+                                            <div class="col-md-11 col-sm-11">
+                                                <div class="titles">
+                                                    <a href="/details/{{$post_date->id_posts}}"><h4>{{$post_date->job_title}}</h4></a>
+                                                    <h6>{{$post_date->company_name}}</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-sm-1">
+                                                <ul class="btns">
+                                                    <li style="border:none; background-color: #F9F9FF;"><a href="#"><span class="lnr lnr-heart"></span></a></li>
+
+                                                    {{--Start Apply Modal--}}
+                                                    {{--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="return getIdPost()">--}}
+                                                    {{--Apply--}}
+                                                    {{--</button>--}}
+
+                                                    <li style="border:none; background-color: #F9F9FF;">
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            {{$post_date->description_work}}
+                                        </p>
+                                        <h5>Job Nature: {{$post_date->name_type_work}}</h5>
+                                        <p class="address"><span class="lnr lnr-map"></span> {{$post_date->location_work}}</p>
+                                        <p class="address"><span class="lnr lnr-database"></span> {{$post_date->name_level_salary}}</p>
+                                        <p class="address"><span class="lnr lnr-clock"></span> Time for submission: <b>{{$post_date->time_for_submission}}</b></p>
+                                        <p class="address"><span class="lnr lnr-shirt"></span> Number of recruitment: <b>{{$post_date->number_recruits }}</b> people</p>
+                                        <p class="address"><span class="lnr lnr-user"></span> Gender : {{$post_date->gender }} </p>
+                                    </div>
                                 </div>
-                                <p>
-                                    {{$post->description_work}}
-                                </p>
-                                <h5>Job Nature: {{$post->name_type_work}}</h5>
-                                <p class="address"><span class="lnr lnr-map"></span> {{$post->location_work}}</p>
-                                <p class="address"><span class="lnr lnr-database"></span> {{$post->name_level_salary}}</p>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <p>Not found any post news</p>
-                @endif
+                            @endforeach
+                        @else
+                            <p>Not found any post news</p>
+                        @endif
+                        {{--end Recent--}}
+                    </div>
+                    <div id="menu1" class="tab-pane fade">
+                        <h3>Menu 1</h3>
+                        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                    <div id="menu2" class="tab-pane fade">
+                        <h3>Menu 2</h3>
+                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                    </div>
+                    <div id="menu3" class="tab-pane fade">
+                        <h3>Menu 3</h3>
+                        <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                    </div>
+                </div>
 
-                {{--end Recent--}}
-                
+
+
                 <a class="text-uppercase loadmore-btn mx-auto d-block" href="category.html">Load More job Posts</a>
-
             </div>
-            <div class="col-lg-4 sidebar">
-                <div class="single-slidebar">
-                    <h4>Jobs by Location</h4>
-                    <ul class="cat-list">
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>New York</p><span>37</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Park Montana</p><span>57</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Atlanta</p><span>33</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Arizona</p><span>36</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Florida</p><span>47</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Rocky Beach</p><span>27</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Chicago</p><span>17</span></a></li>
-                    </ul>
-                </div>
-
-                <div class="single-slidebar">
-                    <h4>Top rated job posts</h4>
-                    <div class="active-relatedjob-carusel">
-                        <div class="single-rated">
-                            <img class="img-fluid" src="{{ asset('img/r1.jpg') }}" alt="">
-                            <a href="single.html"><h4>Creative Art Designer</h4></a>
-                            <h6>Premium Labels Limited</h6>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temporinc ididunt ut dolore magna aliqua.
-                            </p>
-                            <h5>Job Nature: Full time</h5>
-                            <p class="address"><span class="lnr lnr-map"></span> 56/8, Panthapath Dhanmondi Dhaka</p>
-                            <p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
-                            <a href="#" class="btns text-uppercase">Apply job</a>
-                        </div>
-                        <div class="single-rated">
-                            <img class="img-fluid" src="{{ asset('img/r1.jpg') }}" alt="">
-                            <a href="single.html"><h4>Creative Art Designer</h4></a>
-                            <h6>Premium Labels Limited</h6>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temporinc ididunt ut dolore magna aliqua.
-                            </p>
-                            <h5>Job Nature: Full time</h5>
-                            <p class="address"><span class="lnr lnr-map"></span> 56/8, Panthapath Dhanmondi Dhaka</p>
-                            <p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
-                            <a href="#" class="btns text-uppercase">Apply job</a>
-                        </div>
-                        <div class="single-rated">
-                            <img class="img-fluid" src="{{ asset('img/r1.jpg') }}" alt="">
-                            <a href="single.html"><h4>Creative Art Designer</h4></a>
-                            <h6>Premium Labels Limited</h6>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temporinc ididunt ut dolore magna aliqua.
-                            </p>
-                            <h5>Job Nature: Full time</h5>
-                            <p class="address"><span class="lnr lnr-map"></span> 56/8, Panthapath Dhanmondi Dhaka</p>
-                            <p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
-                            <a href="#" class="btns text-uppercase">Apply job</a>
-                        </div>																		
-                    </div>
-                </div>							
-
-                <div class="single-slidebar">
-                    <h4>Jobs by Category</h4>
-                    <ul class="cat-list">
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Technology</p><span>37</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Media & News</p><span>57</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Goverment</p><span>33</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Medical</p><span>36</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Restaurants</p><span>47</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Developer</p><span>27</span></a></li>
-                        <li><a class="justify-content-between d-flex" href="category.html"><p>Accounting</p><span>17</span></a></li>
-                    </ul>
-                </div>
-
-                <div class="single-slidebar">
-                    <h4>Carrer Advice Blog</h4>
-                    <div class="blog-list">
-                        <div class="single-blog " style="background:#000 url({{ asset('img/blog1.jpg') }}">
-                            <a href="single.html"><h4>Home Audio Recording <br>
-                            For Everyone</h4></a>
-                            <div class="meta justify-content-between d-flex">
-                                <p>
-                                    02 Hours ago
-                                </p>
-                                <p>
-                                    <span class="lnr lnr-heart"></span>
-                                    06
-                                        <span class="lnr lnr-bubble"></span>
-                                    02
-                                </p>
-                            </div>
-                        </div>
-                        <div class="single-blog " style="background:#000 url({{ asset('img/blog2.jpg') }}">
-                            <a href="single.html"><h4>Home Audio Recording <br>
-                            For Everyone</h4></a>
-                            <div class="meta justify-content-between d-flex">
-                                <p>
-                                    02 Hours ago
-                                </p>
-                                <p>
-                                    <span class="lnr lnr-heart"></span>
-                                    06
-                                        <span class="lnr lnr-bubble"></span>
-                                    02
-                                </p>
-                            </div>
-                        </div>
-                        <div class="single-blog " style="background:#000 url({{ asset('img/blog1.jpg') }}">
-                            <a href="single.html"><h4>Home Audio Recording <br>
-                            For Everyone</h4></a>
-                            <div class="meta justify-content-between d-flex">
-                                <p>
-                                    02 Hours ago
-                                </p>
-                                <p>
-                                    <span class="lnr lnr-heart"></span>
-                                    06
-                                        <span class="lnr lnr-bubble"></span>
-                                    02
-                                </p>
-                            </div>
-                        </div>																		
-                    </div>
-                </div>							
-
-            </div>
+            {{--Include Sidebar--}}
+            @include('inc.sidebar')
         </div>
-    </div>	
+    </div>
 </section>
 <!-- End post Area -->
     
