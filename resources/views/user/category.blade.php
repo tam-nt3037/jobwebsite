@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <!-- start banner Area -->
 <section class="banner-area relative" id="home">	
@@ -287,4 +288,9 @@
         </div>	
     </section>
     <!-- End calto-action Area -->	
+@endsection
+
+@section('scripts-first')
+    <script src="{{ asset('js/vendor/jquery-2.2.4.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/bootstrap.min.js') }}"></script>
 @endsection

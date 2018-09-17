@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Validation Language Lines
+    | Validation Languages Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines contain the default error messages used by
@@ -115,7 +115,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Custom Validation Language Lines
+    | Custom Validation Languages Lines
     |--------------------------------------------------------------------------
     |
     | Here you may specify custom validation messages for attributes using the

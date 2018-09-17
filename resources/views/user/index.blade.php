@@ -261,12 +261,18 @@
                     ul li a:hover{
                         text-decoration: none;
                     }
+                    .post-list .cat-list li a {
+                        text-transform: none;
+                        word-spacing: 300px;
+                        font-weight: 300;
+                        color: #222;
+                    }
                 </style>
-                <ul class="cat-list" style="">
-                    <li class="active"><a data-toggle="tab" href="#home1">RECENT</a></li>
-                    <li><a data-toggle="tab" href="#menu1">FULL-TIME</a></li>
-                    <li><a data-toggle="tab" href="#menu2">INTERN</a></li>
-                    <li><a data-toggle="tab" href="#menu3">PART-TIME</a></li>
+                <ul class="cat-list" style="text-decoration: none; ">
+                    <li class="active"><a data-toggle="tab" href="#home1">Recent</a></li>
+                    <li><a data-toggle="tab" href="#menu1">Full-time</a></li>
+                    <li><a data-toggle="tab" href="#menu2">Intern</a></li>
+                    <li><a data-toggle="tab" href="#menu3">Part-time</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -299,7 +305,7 @@
                                             </div>
                                             <div class="col-md-1 col-sm-1">
                                                 <ul class="btns">
-                                                    <li style="border:none; background-color: #F9F9FF;"><a href="#"><span class="lnr lnr-heart"></span></a></li>
+                                                    <li style=""><a href=""><span class="lnr lnr-heart"></span></a></li>
 
                                                     {{--Start Apply Modal--}}
                                                     {{--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="return getIdPost()">--}}
@@ -413,5 +419,10 @@
     </div>	
 </section>
 <!-- End download Area -->
+@endsection
+
+@section('scripts-first')
+        <script src="{{ asset('js/vendor/jquery-2.2.4.min.js') }}"></script>
+        <script src="{{ asset('js/vendor/bootstrap.min.js') }}"></script>
 @endsection
 

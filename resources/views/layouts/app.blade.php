@@ -30,6 +30,9 @@
         <link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('css/x-editable/bootstrap-editable.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     {{--Custom Style : Link Bootstrap Make Change--}}
     <style>
         body {
@@ -53,12 +56,14 @@
          <!-- start footer Area -->		
          @include('inc.footer')
          <!-- End footer Area -->
-         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="{{ asset('js/vendor/jquery-2.2.4.min.js') }}"></script>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/vendor/bootstrap.min.js') }}"></script>
+
+         @yield('scripts-first')
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
     <script src="{{ asset('js/easing.min.js') }}"></script>
     <script src="{{ asset('js/hoverIntent.js') }}"></script>
@@ -71,5 +76,17 @@
     <script src="{{ asset('js/parallax.min.js') }}"></script>
     <script src="{{ asset('js/mail-script.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+
+         @yield('scripts-end')
+
+         {{--CKEditor--}}
+     <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
+     <script>
+         CKEDITOR.replace( 'article-ckeditor-summary');
+         CKEDITOR.replace( 'article-ckeditor-description');
+         CKEDITOR.replace( 'article-ckeditor-achievements');
+     </script>
+         {{--CKEditor--}}
+
 </body>
 </html>

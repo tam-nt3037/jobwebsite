@@ -1,3 +1,15 @@
+<style>
+
+    a a:hover{
+        text-decoration: none;
+        color: #FBCD95;
+    }
+    ul  li  a:hover{
+        text-decoration: none;
+        color: #FBCD95;
+    }
+
+</style>
 <header id="header" id="home">
   <div class="container">
       <div class="row align-items-center justify-content-between d-flex">
@@ -38,7 +50,9 @@
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('logout') }}" style="background-color: blueviolet"
+                        <a class="dropdown-item" href="/my-career-center/dashboard" style="color: #555;float: right;background-color: #FFFFFF;">Dashboard</a>
+                        <hr>
+                        <a class="dropdown-item" href="{{ route('logout') }}" style="background-color: #b881eb;float: right;"
                            onclick="event.preventDefault();
                                          document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
