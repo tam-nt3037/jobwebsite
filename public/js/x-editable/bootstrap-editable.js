@@ -4976,7 +4976,7 @@ Editableform based on Twitter Bootstrap 3
 		if (this.o.rtl){
 			this.picker.addClass('datepicker-rtl');
 			this.picker.find('.prev i, .next i')
-						.toggleClass('icon-arrow-left icon-arrow-right');
+						.toggleClass('logo_company-arrow-left logo_company-arrow-right');
 		}
 
 
@@ -6107,9 +6107,9 @@ Editableform based on Twitter Bootstrap 3
 		},
 		headTemplate: '<thead>'+
 							'<tr>'+
-								'<th class="prev"><i class="icon-arrow-left"/></th>'+
+								'<th class="prev"><i class="logo_company-arrow-left"/></th>'+
 								'<th colspan="5" class="datepicker-switch"></th>'+
-								'<th class="next"><i class="icon-arrow-right"/></th>'+
+								'<th class="next"><i class="logo_company-arrow-right"/></th>'+
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
@@ -6465,7 +6465,7 @@ Automatically shown in inline mode.
         /**
         @property tpl 
         **/         
-        tpl:'<div class="input-append date"><input type="text"/><span class="add-on"><i class="icon-th"></i></span></div>',
+        tpl:'<div class="input-append date"><input type="text"/><span class="add-on"><i class="logo_company-th"></i></span></div>',
         /**
         @property inputclass 
         @default 'input-small'
@@ -6788,7 +6788,7 @@ Automatically shown in inline mode.
         /**
         @property tpl 
         **/         
-        tpl:'<div class="input-append date"><input type="text"/><span class="add-on"><i class="icon-th"></i></span></div>',
+        tpl:'<div class="input-append date"><input type="text"/><span class="add-on"><i class="logo_company-th"></i></span></div>',
         /**
         @property inputclass 
         @default 'input-medium'

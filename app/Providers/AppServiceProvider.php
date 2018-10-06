@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -62,6 +63,21 @@ class AppServiceProvider extends ServiceProvider
 //        }
 //        View::share('post_news', $post_news);
 //        View::share('info_candidate',$info_candidate);
+
+
+        View::composer(['inc.sidebar2','recruit.account_info'], function ($view) {
+            $recruitId = Request::session()->get('recruitID');
+            $data_recruit = \Illuminate\Support\Facades\DB::table('recruiter')
+                ->where('id_account_recruiter', '=', $recruitId)
+                ->get();
+            $account_recruit = \Illuminate\Support\Facades\DB::table('account_recruiter')
+                ->where('id','=',$recruitId)
+                ->get();
+
+            //pass the data to the view
+            $view->with('data_recruit_info', $data_recruit)
+                ->with('account_recruit', $account_recruit);
+        });
     }
 
     /**

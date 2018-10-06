@@ -31,36 +31,81 @@
                             <div class="single-post d-flex flex-row">
                                 <div class="thumb">
                                     <img src="{{ asset('img/post.png') }}" alt="">
-                                    <ul class="tags">
-                                        <li>
-                                            <a href="#">Art</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Media</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Design</a>
-                                        </li>
-                                    </ul>
+                                    {{--<ul class="tags">--}}
+                                    {{--<li>--}}
+                                    {{--<a href="#">Art</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                    {{--<a href="#">Media</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                    {{--<a href="#">Design</a>--}}
+                                    {{--</li>--}}
+                                    {{--</ul>--}}
                                 </div>
                                 <div class="details">
                                     <div class="title d-flex flex-row justify-content-between">
-                                        <div class="col-md-8 col-sm-8">
+                                        <div class="col-md-9 col-sm-9">
                                             <div class="titles">
                                                 <a href="#"><h4>{{$post->job_title}}</h4></a>
                                                 <h6>{{$post->company_name}}</h6>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-4">
-                                            <ul class="btns">
-                                                <li style=""><a href=""><span class="lnr lnr-heart"></span></a></li>
+                                        <div class="col-md-3 col-sm-3">
+                                            <div class="row">
+                                                @guest
+                                                    <button type="button"
+                                                            class="btn btn-primary"
+                                                            data-toggle="popover" title="Info"
+                                                            data-placement="left"
+                                                            data-content="Please login to saved job !!! <hr/>   <a class='ticker-btn' href='{{ route('login') }}'>Login</a> ">
+                                                        <span class="lnr lnr-heart"></span>
+                                                    </button>
+                                                @else
+                                                    @if(count($post_news) > 0)
+                                                        @if(count($saved_jobs) > 0)
+                                                            @foreach($post_news as $post)
+                                                                <?php
+                                                                $flag = false;
+                                                                ?>
+                                                                @foreach($saved_jobs as $saved)
 
-                                                {{--Start Apply Modal--}}
-                                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#myModal">
-                                                    Apply
-                                                </button>
-                                                <li style="border:none; background-color: #F9F9FF;">
+                                                                    @if($saved->id_post_news == $post->id_posts and $saved->id_candidate == auth()->user()->id)
+                                                                        <?php
+                                                                        $flag = true;
+                                                                        ?>
+                                                                    @endif
+                                                                @endforeach
+                                                                @if($flag == true)
+                                                                    <button type="button"
+                                                                            class="btn btn-warning"
+                                                                            data-toggle="popover" title="Info"
+                                                                            data-placement="left"
+                                                                            data-content="Watch your saved jobs  <hr/>   <a class='ticker-btn' href='/my-career-center/my-profile'>Here</a> ">
+                                                                        <span class="lnr lnr-heart"></span>
+                                                                    </button>
+                                                                @else
+                                                                    <form method="POST">
+                                                                        <a>
+                                                                            <button type="button"
+                                                                                    class="btn btn-primary"
+                                                                                    name="btnSavedJobs"
+                                                                                    data-jobs-id-candidate="{{auth()->user()->id}}"
+                                                                                    data-jobs-id-postnews="{{$post->id_posts}}">
+                                                                                <span class="lnr lnr-heart"></span>
+                                                                            </button>
+                                                                        </a>
+                                                                    </form>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    @endif
+
+
+                                                    <button type="button" class="btn btn-primary ml-2" data-toggle="modal"
+                                                            data-target="#myModal">
+                                                        Apply
+                                                    </button>
                                                     <!-- The Modal -->
                                                     <div class="modal fade" id="myModal">
                                                         <div class="modal-dialog modal-lg">
@@ -202,7 +247,6 @@
                                                                         @endforeach
                                                                     @endif
                                                                     {!! Form::close() !!}
-                                                                    {{--TODO--}}
                                                                 @else
                                                                     <div class="modal-body">
                                                                         <div>Please login your account</div>
@@ -215,9 +259,19 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {{--End Apply Modal--}}
-                                                </li>
-                                            </ul>
+                                                @endguest
+
+                                                {{--<ul class="btns">--}}
+                                                {{--<li style=""><a href=""><span class="lnr lnr-heart"></span></a></li>--}}
+
+                                                {{--Start Apply Modal--}}
+
+                                                {{--<li style="border:none; background-color: #F9F9FF;">--}}
+
+                                                {{--End Apply Modal--}}
+                                                {{--</li>--}}
+                                                {{--</ul>--}}
+                                            </div>
                                         </div>
                                     </div>
                                     <p>
@@ -238,7 +292,7 @@
                             <div class="single-post job-details">
                                 <h4 class="single-title"> WHAT WE CAN OFFER</h4>
                                 <p>
-                                    {{$post->benefit}}
+                                    {!! $post->benefit !!}
                                 </p>
                             </div>
                             <div class="single-post job-details">
@@ -266,15 +320,15 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="single-post job-experience">
-                                <h4 class="single-title">Job Features & Overviews</h4>
-                                <ul>
-                                    <li>
-                                        <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                        <span></span>
-                                    </li>
-                                </ul>
-                            </div>
+                            {{--<div class="single-post job-experience">--}}
+                            {{--<h4 class="single-title">Job Features & Overviews</h4>--}}
+                            {{--<ul>--}}
+                            {{--<li>--}}
+                            {{--<img src="{{ asset('img/pages/list.jpg') }}" alt="">--}}
+                            {{--<span></span>--}}
+                            {{--</li>--}}
+                            {{--</ul>--}}
+                            {{--</div>--}}
                             <div class="single-post job-experience">
                                 <h4 class="single-title">Education Requirements</h4>
                                 <ul>
@@ -284,15 +338,15 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="single-post job-experience">
-                                <h4 class="single-title">Profile Requirements</h4>
-                                <ul>
-                                    <li>
-                                        <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                        <span>Require for profile: {{$post->require_profile}}</span>
-                                    </li>
-                                </ul>
-                            </div>
+                            {{--<div class="single-post job-experience">--}}
+                            {{--<h4 class="single-title">Profile Requirements</h4>--}}
+                            {{--<ul>--}}
+                            {{--<li>--}}
+                            {{--<img src="{{ asset('img/pages/list.jpg') }}" alt="">--}}
+                            {{--<span></span>--}}
+                            {{--</li>--}}
+                            {{--</ul>--}}
+                            {{--</div>--}}
                         </div>
 
                         {{--End get data for details info--}}
@@ -323,9 +377,10 @@
                                         <link rel='parent' href='abc.txt' target='_blank'>
                                         <script>
                                             var js_variable = '<?php echo $name;?>';
-                                            var res = js_variable.split(" , ");
+                                            var res = js_variable.split(",");
                                             res.forEach(function (element) {
-                                                document.getElementById("demo").innerHTML += "<a href='" + element + "'>" + element + "</a><br/>";
+                                                element = element.replace(/\s/g, '');
+                                                document.getElementById("demo").innerHTML += "<a href='../search/" + element + "'>" + element + "</a><br/>";
                                             });
 
                                         </script>
@@ -360,22 +415,26 @@
 
 
     <!-- Start callto-action Area -->
-    <section class="callto-action-area section-gap">
-        <div class="container">
-            <div class="row d-flex justify-content-center">
-                <div class="menu-content col-lg-9">
-                    <div class="title text-center">
-                        <h1 class="mb-10 text-white">Join us today without any hesitation</h1>
-                        <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation.</p>
-                        <a class="primary-btn" href="#">I am a Candidate</a>
-                        <a class="primary-btn" href="#">We are an Employer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{--<section class="callto-action-area section-gap">--}}
+    {{--<div class="container">--}}
+    {{--<div class="row d-flex justify-content-center">--}}
+    {{--<div class="menu-content col-lg-9">--}}
+    {{--<div class="title text-center">--}}
+    {{--<h1 class="mb-10 text-white">Join us today without any hesitation</h1>--}}
+    {{--<p class="text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod--}}
+    {{--tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud--}}
+    {{--exercitation.</p>--}}
+    {{--<a class="primary-btn" href="#">I am a Candidate</a>--}}
+    {{--<a class="primary-btn" href="#">We are an Employer</a>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</section>--}}
     <!-- End calto-action Area -->
 
+@endsection
+
+@section('scripts-end')
+    <script src="{{ asset('js/my_user.js') }}">
 @endsection

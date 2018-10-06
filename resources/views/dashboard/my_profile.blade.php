@@ -693,7 +693,7 @@
                             <input type="text" id="count_languages_data" value="{{count($languages_data)}}" hidden>
                             @if(count($languages_data) > 0)
                                 @foreach($languages_data as $languages_data_item)
-                                    <div class="row">
+                                    <div class="row" id="wrap_content_languages">
                                         <div class="col-sm-4 mb-2 mt-2">
 
                                             <div id="name_language_view">{{$languages_data_item->name_language}}</div>
@@ -711,13 +711,21 @@
                                                        data-languages-proficiency="{{$languages_data_item->proficiency}}">
                                                         Edit</a>
                                                 </button>
-                                                {!! Form::open(['action' => ['DashboardController@user_delete_languages', $languages_data_item->id], 'id' => '' ,'method' => 'POST']) !!}
-                                                {{Form::hidden('_method','DELETE') }}
-                                                <button type="submit" class="btn btn-default btn-danger"
-                                                        id="btnDeleteLanguages">
-                                                    Delete
-                                                </button>
-                                                {!! Form::close() !!}
+
+                                                {{--<form action="{{action('DashboardController@user_delete_languages', $languages_data_item->id)}}" method="POST">--}}
+                                                    {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
+                                                    {{--<button type="submit" class="btn btn-default btn-danger"--}}
+                                                            {{--id="btnDeleteLanguages">--}}
+                                                        {{--Delete--}}
+                                                    {{--</button>--}}
+                                                {{--</form>--}}
+                                                <form method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <button type="submit" class="btn btn-default btn-danger"
+                                                            id="btnDeleteLanguages">
+                                                        Delete
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -853,11 +861,11 @@
                                         <label for="">{{$employ_history->position}}</label>
                                         <h5>{{$employ_history->company}}</h5>
                                         <h5>
-                                            <span class="view-control pr-5"
-                                                  data-control="from-date">From time: {{$employ_history->start_time}}</span>
+                                            <span class="pr-5">From: <span
+                                                        id="start_time_employ_view">{{$employ_history->start_time}}</span></span>
 
-                                            <span class="view-control pl-5" data-control="to-date"
-                                                  data-type="manual">To time: {{$employ_history->end_time}}</span>
+                                            <span class="pl-5">To: <span
+                                                        id="end_time_employ_view">{{$employ_history->end_time}}</span></span>
                                             <span class="total-time"></span>
                                         </h5>
                                         <h5>{!! $employ_history->description !!} </h5>
@@ -878,7 +886,7 @@
 
 
                                             {!! Form::open(['action' => ['DashboardController@user_delete_employment_history', $employ_history->id], 'id' => '' ,'method' => 'POST']) !!}
-                                            {{Form::hidden('_method','DELETE') }}
+                                            {{  Form::hidden('_method','DELETE') }}
                                             <button type="submit" class="btn btn-default btn-danger"
                                                     id="">Delete
                                             </button>
@@ -1017,41 +1025,65 @@
                         </button>
                     </div>
                     <div class="collapse card-body" id="collapseEducate">
-                        <div class="row mb-3 mt-3">
-                            <div class="col-sm-8">
-                                <label for="">Math</label>
-                                <h5>Tran Hung Dao</h5>
-                                <h5>High School</h5>
+                        @if(count($education_history) > 0)
+                            @foreach($education_history as $education)
+                                <div class="row mb-3 mt-3">
+                                    <div class="col-sm-10">
+                                        <label id="major_view">{{$education->major}}</label>
+                                        <h5 id="school_view">{{$education->school}}</h5>
+                                        <h5 id="degree_view">{{$education->degree}}</h5>
 
-                                <h5>
-                                    <span class="view-control" data-control="from-date">06/2017</span>
-                                    -
-                                    <span class="view-control" data-control="to-date" data-type="manual">07/2018</span>
-                                    <span class="total-time">
-                                        (
-                                        <span class="years" style="display: none;">
-                                            <span class="number-of-years">0</span>
-                                            <span class="lbl">năm</span>
-                                        </span>
-                                        <span class="months">
-                                            <span class="number-of-months">2</span>
-                                            <span class="lbl">months</span>
-                                        </span>
-                                        )
-                                    </span>
-                                </h5>
-                                <h5>Achievement of you</h5>
-                            </div>
-                            <div class="col-sm-4 text-right p-5">
-                                <span><button type="button" class="btn btn-default btn-cancel"
-                                              id="btnEdit" data-toggle="modal" data-target="#modalFormEducationHistory">
-                                        Edit</button></span>
-                            </div>
-                        </div>
+                                        <h5>
+                                            <span class="pr-5">From: <span
+                                                        id="start_time_education_view">{{$education->start_time}}</span></span>
+
+                                            <span class="pl-5">From: <span
+                                                        id="start_time_education_view">{{$education->end_time}}</span></span>
+                                            <span class="total-time"></span>
+                                        </h5>
+                                        <h5 id="achievement_view">{!! $education->achievements !!}</h5>
+                                    </div>
+                                    <div class="col-sm-2 text-right p-5">
+                                        <div class="row">
+                                            <button type="button" class="btn btn-default btn-cancel mr-2"
+                                                    id="btnEdit">
+                                                <a href="#modalFormEducationHistory" data-toggle="modal"
+                                                   data-education-id="{{$education->id}}"
+                                                   data-education-major="{{$education->major}}"
+                                                   data-education-school="{{$education->school}}"
+                                                   data-education-degree="{{$education->degree}}"
+                                                   data-education-start-time="{{$education->start_time}}"
+                                                   data-education-end-time="{{$education->end_time}}"
+                                                   data-education-achievements="{{$education->achievements}}">
+                                                    Edit
+                                                </a>
+                                            </button>
+                                            {!! Form::open(['action' => ['DashboardController@user_delete_education_history', $education->id], 'id' => '' ,'method' => 'POST']) !!}
+                                            {{  Form::hidden('_method','DELETE') }}
+                                            <button type="submit" class="btn btn-default btn-danger"
+                                            id="">Delete
+                                            </button>
+                                            {!! Form::close() !!}
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <hr>
+                            @endforeach
+                        @endif
                         <div class="row m-4">
                             <button type="button" class="btn btn-default btn-block no-border add-one-more-section"
                                     id="add-language-button" style="display: block;">
-                                <strong>Add Education History</strong>
+                                <a href="#modalFormEducationHistory" data-toggle="modal"
+                                   data-education-id="-1"
+                                   data-education-major=""
+                                   data-education-school=""
+                                   data-education-degree="-1"
+                                   data-education-start-time=""
+                                   data-education-end-time=""
+                                   data-education-achievements="">
+                                    <strong>Add Education History</strong>
+                                </a>
                             </button>
                         </div>
                     </div>
@@ -1074,80 +1106,55 @@
                             <!-- Modal Body -->
                             <div class="modal-body">
                                 <p class="statusMsg"></p>
-                                <form role="form">
+                                <form role="form" method="POST">
                                     <div class="form-group">
                                         <div class="col-sm-12 mb-1">
-                                            <label class="p-1" for="candidate_position">* Subject</label>
-                                            <input type="text" class="form-control" id="candidate_position"
+
+                                            <input type="text" id="education_id" value="" hidden/>
+                                            <label class="p-1" for="education_major">* Subject</label>
+                                            <input type="text" class="form-control" id="education_major"
                                                    placeholder="e.g. International Business"/>
 
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-6 mb-1">
-                                            <label class="p-1" for="candidate_company">* School</label>
-                                            <input type="text" class="form-control" id="candidate_company"
+                                            <label class="p-1" for="education_school">* School</label>
+                                            <input type="text" class="form-control" id="education_school"
                                                    placeholder="e.g. University of Economics of Ho Chi Minh City"/>
                                         </div>
                                         <div class="col-sm-6 mb-1">
-                                            <label class="p-1" for="candidate_company">* Qualification</label>
-                                            <select class="form-control" id="select_Current_Job_Level"
+                                            <label class="p-1" for="select_degree">* Qualification</label>
+                                            <select class="selectpicker show-tick form-control" id="select_degree"
                                                     style="height: auto">
-                                                <option class="form-select">Please select ...</option>
-                                                <option class="form-select">Entry Level</option>
+                                                <option class="form-select" value="-1">Please select ...</option>
+                                                @if(count($degree) > 0)
+                                                    @foreach($degree as $degre)
+                                                        <option class="form-select"
+                                                                value="{{$degre->name}}">{{$degre->name}}</option>
+                                                    @endforeach
+                                                @endif
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="col-sm-12 mb-1 mt-1">
-                                            <div class="col-sm-4 mb-1">
-                                                <label class="p-1" for="candidate_company"> From</label>
+                                        <div class="col-sm-12  mb-1 mt-1">
+                                            <div class="col-sm-6">
+                                                <label class="" for="date_education_start">From</label>
+                                                <input class="form-control" id="date_education_start" type="date"
+                                                       value=""/>
                                             </div>
-                                            <div class="col-sm-4 mb-1">
-                                                <label class="p-1" for="candidate_company"> To</label>
-                                            </div>
-                                            <div class="col-sm-4 mb-1">
-                                                <label class="p-1" for="candidate_company"></label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <div class="col-sm-4">
-                                                <div class="control-group">
-                                                    <div class="controls">
-                                                        <div class="input-group">
-                                                            <label for="date-picker-3"
-                                                                   class="input-group-addon btn"><span
-                                                                        class="glyphicon glyphicon-calendar"></span>
-
-                                                            </label>
-                                                            <input id="date-picker-3" type="text"
-                                                                   class="date-picker form-control" value="08/13/2018"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="control-group">
-                                                    <div class="controls">
-                                                        <div class="input-group">
-                                                            <label for="date-picker-3"
-                                                                   class="input-group-addon btn"><span
-                                                                        class="glyphicon glyphicon-calendar"></span>
-
-                                                            </label>
-                                                            <input id="date-picker-3" type="text"
-                                                                   class="date-picker form-control" value="08/13/2018"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
+                                                <label class="" for="date_education_end">To</label>
+                                                <input class="form-control" id="date_education_end" type="date"
+                                                       value=""/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group mb-1 mt-2 pt-2">
                                         <div class="col-sm-12 mt-2 pt-2">
-                                            <label> Achievements</label>
+                                            <label for="article-ckeditor-achievements"> Achievements</label> <label
+                                                    class="ml-5">(Maximum words: 200 words)</label>
                                             <textarea class="form-control" id="article-ckeditor-achievements"
                                                       cols="20"
                                                       rows="10"
@@ -1167,7 +1174,7 @@
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close
                                         </button>
                                         <button type="button" class="btn btn-primary submitBtn"
-                                                onclick="submitContactForm()">
+                                                onclick="submitEducationHistoryForm()">
                                             Save
                                         </button>
                                     </div>
@@ -1824,7 +1831,7 @@
     <script src="{{ asset('js/x-editable/bootstrap-editable.js') }}"></script>
     <script src="{{ asset('js/x-editable/bootstrap-editable.min.js') }}"></script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 

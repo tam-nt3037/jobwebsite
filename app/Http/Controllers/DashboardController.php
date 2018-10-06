@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Degree;
+use App\Model\Education_History;
 use App\Model\Employment_History;
+use App\Model\Group_Job_Category;
 use App\Model\Info_candidate;
 use App\Model\Job_Category;
 use App\Model\Job_Level;
@@ -13,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
 class DashboardController extends Controller
 {
@@ -20,11 +24,38 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+
+
+        $saved_jobs = DB::table('saved_jobs')->get();
+        $post_news_for_saved_jobs = DB::table('post_news')
+            ->join('saved_jobs','post_news.id_posts','=','saved_jobs.id_post_news')
+            ->join('recruiter','recruiter.id_account_recruiter','=','post_news.id_account_recruiter')
+            ->select('post_news.*','recruiter.*')
+            ->paginate(5);
+
+        $post_news_for_applied_jobs = DB::table('status_candidate_profile')
+            ->join('post_news','post_news.id_posts','=','status_candidate_profile.id_post_news')
+            ->join('recruiter','recruiter.id_account_recruiter','=','status_candidate_profile.id_account_recruiter')
+            ->select('status_candidate_profile.*','post_news.job_title','post_news.time_for_submission','recruiter.company_name')
+            ->paginate(5);
+
+        // Sharing is caring
+        View::share(compact(
+            'saved_jobs',
+            'post_news_for_saved_jobs',
+            'post_news_for_applied_jobs'
+        ));
     }
 
     public function index()
     {
-        return view('dashboard.dashboard');
+        $id_candidate = auth()->user()->id; //Get uid
+        $info_candidate_profile = Info_candidate::where('id_users', $id_candidate)->get();
+
+        return view('dashboard.dashboard')->with(compact(
+            'info_candidate_profile'
+        ));
     }
 
     public function user_profile(Request $request)
@@ -67,6 +98,12 @@ class DashboardController extends Controller
         //Get Employment History From Database
         $employment_history = Employment_History::where('id_candidate', $id_candidate)->get();
 
+        //Get Education History From Database
+        $education_history = Education_History::where('id_candidate', $id_candidate)->get();
+
+        //Get Degree From Database
+        $degree = Degree::all();
+
 
         return view('dashboard.my_profile')
             ->with(compact('info_candidate_profile',
@@ -79,7 +116,9 @@ class DashboardController extends Controller
                 'working_preferences',
                 'job_category',
                 'benefits_data',
-                'employment_history'
+                'employment_history',
+                'education_history',
+                'degree'
             ));
 
     }
@@ -276,7 +315,7 @@ class DashboardController extends Controller
                     'name_language' => $languagesName,
                     'proficiency' => $languagesProfi
                 ]);
-
+            return back()->with('success','Created Languages Successful');
         }
 
         $languages_data = Languages::where('id_candidate', $id_candidate)->get();
@@ -288,10 +327,9 @@ class DashboardController extends Controller
 
     public function user_delete_languages($id)
     {
-        $post = Languages::find($id);
-        $post->delete();
+        $languages_data = Languages::find($id);
+        $languages_data->delete();
 
-        return back()->with('success', 'Languages Deleted');
 
     }
 
@@ -335,7 +373,53 @@ class DashboardController extends Controller
                     'end_time' => $end_time,
                     'description' => $description
                 ]);
+        }
+    }
 
+    public function user_delete_education_history($id)
+    {
+        DB::table('education_history')
+            ->where('id', '=', $id)
+            ->delete();
+        return back()->with('success', 'Deleted Education successful !!!');
+    }
+
+    public function user_education_history(Request $request)
+    {
+        $id_candidate = auth()->user()->id; //Get uid
+        $education_history_id = $request->input('id');
+        $major = $request->input('major');
+        $school = $request->input('school');
+        $start_time = $request->input('start_time');
+        $end_time = $request->input('end_time');
+        $degree = $request->input('degree');
+        $achievements = $request->input('achievements');
+
+        if ($_SERVER['REQUEST_METHOD'] == 'PUT' && $education_history_id != -1) {
+//            Update employment history
+            DB::table('education_history')
+                ->where('id', $education_history_id)
+                ->update([
+                    'id' => $education_history_id,
+                    'major' => $major,
+                    'school' => $school,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'degree' => $degree,
+                    'achievements' => $achievements
+                ]);
+        } else if ($_SERVER['REQUEST_METHOD'] == 'POST' && $education_history_id == -1) {
+//            Create employment history
+            DB::table('education_history')
+                ->insert([
+                    'id_candidate' => $id_candidate,
+                    'major' => $major,
+                    'school' => $school,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'degree' => $degree,
+                    'achievements' => $achievements
+                ]);
         }
     }
 
@@ -355,6 +439,24 @@ class DashboardController extends Controller
                     'expected_salary' => Input::get('expected_salary'),
                     'expected_benefits' => Input::get('benefit_selected')
                 ]);
+        }
+    }
+
+    public function user_unsave_job(Request $request){
+
+        $id_candidate = auth()->user()->id; //Get uid
+
+        if($_POST['unsave_submit'] == 'Unsave'){
+
+            $id_posts = $request->input('id_posts');
+
+            DB::table('saved_jobs')
+                        ->where('id_candidate','=',  $id_candidate)
+                        ->where('id_post_news','=', $id_posts)
+                        ->delete();
+            return back()->with('success','Unsave job successful');
+        } else {
+            return "Not found user unsave job";
         }
     }
 

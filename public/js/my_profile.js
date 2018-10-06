@@ -1197,6 +1197,88 @@ $(function () {
 });
 /* SET LANGUAGES SELECTED - END */
 
+var token =  $('input[name="_token"]').attr('value');
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+$.ajax({
+
+    type: 'GET',
+    url: '/user/languages',
+    headers: {
+        'X-CSRF-TOKEN' : token
+    },
+
+    success: function (data) {
+
+        /*                      *
+        * Update Value For View *
+        *                       *
+        *                       */
+        console.log(data);
+
+        $('#wrap_languages').empty();
+        $('#wrap_languages').append('' +
+            '<div class="m-3" id="wrap_languages">\n' +
+            '                            <div class="row">\n' +
+            '                                <div class="col-sm-4">\n' +
+            '                                    <label for="">Languages</label>\n' +
+            '                                </div>\n' +
+            '                                <div class="col-sm-8">\n' +
+            '                                    <label>Proficiency</label>\n' +
+            '                                </div>\n' +
+            '                            </div>' +
+            '');
+        $.each(data.languages, function (k, item) {
+            $('#wrap_languages').append('' +
+                ' <div class="row">\n' +
+                '                                        <div class="col-sm-4 mb-2 mt-2">\n' +
+                '\n' +
+                '                                            <div id="name_language_view">' + item.name_language + '</div>\n' +
+                '                                        </div>\n' +
+                '                                        <div class="col-sm-6 mb-2 mt-2">\n' +
+                '                                            <div id="proficiency_view">' + item.proficiency + '</div>\n' +
+                '                                        </div>\n' +
+                '                                        <div class="col-sm-2 mb-2 mt-2 ">\n' +
+                '                                            <div class="row">\n' +
+                '                                                <button type="button" class="btn btn-default btn-cancel mr-1"\n' +
+                '                                                        id="btnEditLanguages">\n' +
+                '                                                    <a href="#modalFormLanguages" data-toggle="modal"\n' +
+                '                                                       data-languages-id="' + item.id + '"\n' +
+                '                                                       data-languages-name="' + item.name_language + '"\n' +
+                '                                                       data-languages-proficiency="' + item.proficiency + '">\n' +
+                '                                                        Edit</a>\n' +
+                '                                                </button>\n' +
+                '\n' +
+                '                                                <form method="POST">\n' +
+                '                                                    <input type="hidden" name="_token" value="'+token+'">\n' +
+                '                                                    <button type="button" class="btn btn-default btn-danger"\n' +
+                '                                                            id="btnDeleteLanguages">\n' +
+                '                                                        Delete\n' +
+                '                                                    </button>\n' +
+                '                                                </form>\n' +
+                '                                            </div>\n' +
+                '                                        </div>\n' +
+                '                                    </div>\n' +
+                '                                    <hr>');
+        });
+        $('#wrap_languages').append('</div>');
+
+
+    },
+    error: function () {
+        console.log(data);
+    }
+});
+
+// DELETE LANGUAGES
+// $(function () {
+//    $('#btnDeleteLanguages').on('click', function () {
+//       alert("Hello");
+//    });
+// });
 
 // SUBMIT FORM
 function submitLanguagesForm() {
@@ -1233,6 +1315,81 @@ function submitLanguagesForm() {
             },
             success: function (data) {
 
+                var token =  $('input[name="_token"]').attr('value');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/user/languages',
+                    headers: {
+                        'X-CSRF-TOKEN' : token
+                    },
+
+                    success: function (data) {
+
+                        /*                      *
+                        * Update Value For View *
+                        *                       *
+                        *                       */
+                        console.log(data);
+
+                        $('#wrap_languages').empty();
+                        $('#wrap_languages').append('' +
+                            '<div class="m-3" id="wrap_languages">\n' +
+                            '                            <div class="row">\n' +
+                            '                                <div class="col-sm-4">\n' +
+                            '                                    <label for="">Languages</label>\n' +
+                            '                                </div>\n' +
+                            '                                <div class="col-sm-8">\n' +
+                            '                                    <label>Proficiency</label>\n' +
+                            '                                </div>\n' +
+                            '                            </div>' +
+                            '');
+                        $.each(data.languages, function (k, item) {
+                            $('#wrap_languages').append('' +
+                                ' <div class="row">\n' +
+                                '                                        <div class="col-sm-4 mb-2 mt-2">\n' +
+                                '\n' +
+                                '                                            <div id="name_language_view">' + item.name_language + '</div>\n' +
+                                '                                        </div>\n' +
+                                '                                        <div class="col-sm-6 mb-2 mt-2">\n' +
+                                '                                            <div id="proficiency_view">' + item.proficiency + '</div>\n' +
+                                '                                        </div>\n' +
+                                '                                        <div class="col-sm-2 mb-2 mt-2 ">\n' +
+                                '                                            <div class="row">\n' +
+                                '                                                <button type="button" class="btn btn-default btn-cancel mr-1"\n' +
+                                '                                                        id="btnEditLanguages">\n' +
+                                '                                                    <a href="#modalFormLanguages" data-toggle="modal"\n' +
+                                '                                                       data-languages-id="' + item.id + '"\n' +
+                                '                                                       data-languages-name="' + item.name_language + '"\n' +
+                                '                                                       data-languages-proficiency="' + item.proficiency + '">\n' +
+                                '                                                        Edit</a>\n' +
+                                '                                                </button>\n' +
+                                '\n' +
+                                '                                                <form action="http://jobwebsite.me/user/languages/'+item.id+'" method="POST">\n' +
+                                '                                                    <input type="hidden" name="_token" value="'+token+'">\n' +
+                                '                                                    <button type="submit" class="btn btn-default btn-danger"\n' +
+                                '                                                            id="btnDeleteLanguages">\n' +
+                                '                                                        Delete\n' +
+                                '                                                    </button>\n' +
+                                '                                                </form>\n' +
+                                '                                            </div>\n' +
+                                '                                        </div>\n' +
+                                '                                    </div>\n' +
+                                '                                    <hr>');
+                        });
+                        $('#wrap_languages').append('</div>');
+
+
+                    },
+                    error: function () {
+                        console.log(data);
+                    }
+                });
 
                 alert("Created languages successful");
             },
@@ -1241,6 +1398,7 @@ function submitLanguagesForm() {
             }
         });
 
+        // Update View
         $.ajax({
 
             type: 'GET',
@@ -1252,50 +1410,54 @@ function submitLanguagesForm() {
                 *                       *
                 *                       */
 
-                //let last = data.languages.length;
-                //alert("Last" + data.languages[last].name_language);
-
-                $('#wrap_languages').append('<div class="row">\n' +
-                    '                                        <div class="col-sm-4 mb-3 mt-3">\n' +
-                    '\n' +
-                    '                                            <div id="name_language_view">' + languagesName + '</div>\n' +
-                    '                                        </div>\n' +
-                    '                                        <div class="col-sm-6 mb-3 mt-3">\n' +
-                    '                                            <div id="proficiency_view">' + languagesProfi + '</div>\n' +
-                    '                                        </div>\n' +
-                    '                                        <div class="col-sm-2 mb-3 mt-3">\n' +
-                    '                                    <span><button type="button" class="btn btn-default btn-cancel"\n' +
-                    '                                                  id="btnEditLanguages">\n' +
-                    '                                            <a href="#modalFormLanguages" data-toggle="modal"\n' +
-                    '                                               data-languages-id="' + languagesId + '"\n' +
-                    '                                               data-languages-name="' + languagesName + '"\n' +
-                    '                                               data-languages-proficiency="' + languagesProfi + '">\n' +
-                    '                                                Edit</a>\n' +
-                    '                                        </button></span>\n' +
-                    '                                        </div>\n' +
-                    '                                    </div>');
-                // $.each(data.languages, function (index, item) {
-                //
-                //     $('#wrap_languages').append('<div class="row">\n' +
-                //         '                                        <div class="col-sm-4 mb-3 mt-3">\n' +
+                // $('#wrap_languages').empty();
+                // $('#wrap_languages').append('' +
+                //     '<div class="m-3" id="wrap_languages">\n' +
+                //     '                            <div class="row">\n' +
+                //     '                                <div class="col-sm-4">\n' +
+                //     '                                    <label for="">Languages</label>\n' +
+                //     '                                </div>\n' +
+                //     '                                <div class="col-sm-8">\n' +
+                //     '                                    <label>Proficiency</label>\n' +
+                //     '                                </div>\n' +
+                //     '                            </div>' +
+                //     '');
+                // $.each(data.languages, function (k, item) {
+                //     $('#wrap_languages').append('' +
+                //         ' <div class="row">\n' +
+                //         '                                        <div class="col-sm-4 mb-2 mt-2">\n' +
                 //         '\n' +
-                //         '                                            <div id="name_language_view">'+item.name_language+'</div>\n' +
+                //         '                                            <div id="name_language_view">' + item.name_language + '</div>\n' +
                 //         '                                        </div>\n' +
-                //         '                                        <div class="col-sm-6 mb-3 mt-3">\n' +
-                //         '                                            <div id="proficiency_view">'+item.proficiency+'</div>\n' +
+                //         '                                        <div class="col-sm-6 mb-2 mt-2">\n' +
+                //         '                                            <div id="proficiency_view">' + item.proficiency + '</div>\n' +
                 //         '                                        </div>\n' +
-                //         '                                        <div class="col-sm-2 mb-3 mt-3">\n' +
-                //         '                                    <span><button type="button" class="btn btn-default btn-cancel"\n' +
-                //         '                                                  id="btnEditLanguages">\n' +
-                //         '                                            <a href="#modalFormLanguages" data-toggle="modal"\n' +
-                //         '                                               data-languages-id="'+item.id+'"\n' +
-                //         '                                               data-languages-name="'+item.name_language+'"\n' +
-                //         '                                               data-languages-proficiency="'+item.proficiency+'">\n' +
-                //         '                                                Edit</a>\n' +
-                //         '                                        </button></span>\n' +
+                //         '                                        <div class="col-sm-2 mb-2 mt-2 ">\n' +
+                //         '                                            <div class="row">\n' +
+                //         '                                                <button type="button" class="btn btn-default btn-cancel mr-1"\n' +
+                //         '                                                        id="btnEditLanguages">\n' +
+                //         '                                                    <a href="#modalFormLanguages" data-toggle="modal"\n' +
+                //         '                                                       data-languages-id="' + item.id + '"\n' +
+                //         '                                                       data-languages-name="' + item.name_language + '"\n' +
+                //         '                                                       data-languages-proficiency="' + item.proficiency + '">\n' +
+                //         '                                                        Edit</a>\n' +
+                //         '                                                </button>\n' +
+                //         '\n' +
+                //         '                                                <form action="'+window.location.host+'/user/languages/'+item.id+'" method="POST">\n' +
+                //         '                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">\n' +
+                //         '                                                    <button type="submit" class="btn btn-default btn-danger"\n' +
+                //         '                                                            id="btnDeleteLanguages">\n' +
+                //         '                                                        Delete\n' +
+                //         '                                                    </button>\n' +
+                //         '                                                </form>\n' +
+                //         '                                            </div>\n' +
                 //         '                                        </div>\n' +
-                //         '                                    </div>');
+                //         '                                    </div>\n' +
+                //         '                                    <hr>');
                 // });
+                // $('#wrap_languages').append('</div>');
+
+
             },
             error: function () {
                 console.log(data);
@@ -1326,6 +1488,81 @@ function submitLanguagesForm() {
                 *                       *
                 *                       */
 
+                var token =  $('input[name="_token"]').attr('value');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/user/languages',
+                    headers: {
+                        'X-CSRF-TOKEN' : token
+                    },
+
+                    success: function (data) {
+
+                        /*                      *
+                        * Update Value For View *
+                        *                       *
+                        *                       */
+                        console.log(data);
+
+                        $('#wrap_languages').empty();
+                        $('#wrap_languages').append('' +
+                            '<div class="m-3" id="wrap_languages">\n' +
+                            '                            <div class="row">\n' +
+                            '                                <div class="col-sm-4">\n' +
+                            '                                    <label for="">Languages</label>\n' +
+                            '                                </div>\n' +
+                            '                                <div class="col-sm-8">\n' +
+                            '                                    <label>Proficiency</label>\n' +
+                            '                                </div>\n' +
+                            '                            </div>' +
+                            '');
+                        $.each(data.languages, function (k, item) {
+                            $('#wrap_languages').append('' +
+                                ' <div class="row">\n' +
+                                '                                        <div class="col-sm-4 mb-2 mt-2">\n' +
+                                '\n' +
+                                '                                            <div id="name_language_view">' + item.name_language + '</div>\n' +
+                                '                                        </div>\n' +
+                                '                                        <div class="col-sm-6 mb-2 mt-2">\n' +
+                                '                                            <div id="proficiency_view">' + item.proficiency + '</div>\n' +
+                                '                                        </div>\n' +
+                                '                                        <div class="col-sm-2 mb-2 mt-2 ">\n' +
+                                '                                            <div class="row">\n' +
+                                '                                                <button type="button" class="btn btn-default btn-cancel mr-1"\n' +
+                                '                                                        id="btnEditLanguages">\n' +
+                                '                                                    <a href="#modalFormLanguages" data-toggle="modal"\n' +
+                                '                                                       data-languages-id="' + item.id + '"\n' +
+                                '                                                       data-languages-name="' + item.name_language + '"\n' +
+                                '                                                       data-languages-proficiency="' + item.proficiency + '">\n' +
+                                '                                                        Edit</a>\n' +
+                                '                                                </button>\n' +
+                                '\n' +
+                                '                                                <form action="http://jobwebsite.me/user/languages/'+item.id+'" method="POST">\n' +
+                                '                                                    <input type="hidden" name="_token" value="'+token+'">\n' +
+                                '                                                    <button type="submit" class="btn btn-default btn-danger"\n' +
+                                '                                                            id="btnDeleteLanguages">\n' +
+                                '                                                        Delete\n' +
+                                '                                                    </button>\n' +
+                                '                                                </form>\n' +
+                                '                                            </div>\n' +
+                                '                                        </div>\n' +
+                                '                                    </div>\n' +
+                                '                                    <hr>');
+                        });
+                        $('#wrap_languages').append('</div>');
+
+
+                    },
+                    error: function () {
+                        console.log(data);
+                    }
+                });
 
                 alert("Updated languages successful");
             },
@@ -1405,6 +1642,7 @@ function submitEmploymentHistoryForm() {
             success: function (data) {
                 console.log(data);
                 alert('Created Employment History Successful !!!');
+                location.reload();
             },
             error: function (data) {
                 console.log(data);
@@ -1435,6 +1673,7 @@ function submitEmploymentHistoryForm() {
             success: function (data) {
                 console.log(data);
                 alert('Updated Employment History Successful !!!');
+                location.reload();
             },
             error: function (data) {
                 console.log(data);
@@ -1443,12 +1682,129 @@ function submitEmploymentHistoryForm() {
         });
 
 
-
     }
 }
 
 /* Employment History End */
 
+$(function () {
+    $('#modalFormEducationHistory').on('show.bs.modal', function (e) {
+        let id = $(e.relatedTarget).data('education-id');
+        let major = $(e.relatedTarget).data('education-major');
+        let school = $(e.relatedTarget).data('education-school');
+        let degree = $(e.relatedTarget).data('education-degree');
+        let start_time = $(e.relatedTarget).data('education-start-time');
+        let end_time = $(e.relatedTarget).data('education-end-time');
+        let achievements = $(e.relatedTarget).data('education-achievements');
+
+        $('#education_id').val(id);
+        $('#education_major').val(major);
+        $('#education_school').val(school);
+        $('#date_education_start').val(start_time);
+        $('#date_education_end').val(end_time);
+        $('#select_degree').selectpicker('val', degree);
+        CKEDITOR.instances['article-ckeditor-achievements'].setData(achievements);
+
+    });
+});
+
+/* Education History */
+
+function submitEducationHistoryForm() {
+    let id = $('#education_id').val();
+    let major = $('#education_major').val();
+    let school = $('#education_school').val();
+    let start_time = $('#date_education_start').val();
+    let end_time = $('#date_education_end').val();
+    let degree = $('#select_degree').selectpicker('val');
+    let achievements = CKEDITOR.instances['article-ckeditor-achievements'].getData().toString();
+    let words_length = achievements.split(' ').length;
+
+
+    if (major.trim() == '') {
+        $('#education_major').focus();
+        alert('Please input your subject');
+        return false;
+    } else if (school == '') {
+        $('#education_school').focus();
+        alert('Please input your school');
+        return false;
+    } else if (degree == '-1') {
+        $('#select_degree').focus();
+        alert('Please select your qualification');
+        return false;
+    } else if (words_length >= 200) {
+        alert('Maximum word length is 200 words');
+        CKEDITOR.instances['article-ckeditor-achievements'].focus();
+        return false;
+    } else if (id == '-1') {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+
+            type: 'POST',
+            url: '/user/education_history',
+            data: {
+                id: id,
+                major: major,
+                school: school,
+                start_time: start_time,
+                end_time: end_time,
+                degree: degree,
+                achievements: achievements
+            },
+            success: function (data) {
+                console.log(data);
+                alert('Created Education History Successful !!!');
+                location.reload();
+            },
+            error: function (data) {
+                console.log(data);
+                alert('Created Education History Fail !!!');
+            }
+        });
+
+    } else {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+
+            type: 'PUT',
+            url: '/user/education_history',
+            data: {
+                id: id,
+                major: major,
+                school: school,
+                start_time: start_time,
+                end_time: end_time,
+                degree: degree,
+                achievements: achievements
+            },
+            success: function (data) {
+                console.log(data);
+                alert('Updated Education History Successful !!!');
+                location.reload();
+            },
+            error: function (data) {
+                console.log(data);
+                alert('Updated Education History Fail !!!');
+            }
+        });
+    }
+
+}
+
+/* Education History End */
 
 /* Load Benefits View */
 $(function () {
@@ -1460,6 +1816,7 @@ $(function () {
     });
 });
 /* Load Benefits View End */
+
 
 /* Working Preferences */
 
@@ -1577,6 +1934,7 @@ function submitWorkingPreferencesForm() {
                 });
 
                 alert("Updated working preferences successful");
+                location.reload();
             },
             error: function () {
                 console.log(data);

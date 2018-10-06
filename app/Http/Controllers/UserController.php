@@ -6,7 +6,10 @@ use App\Jobs\SendMailRecruiterJob;
 use App\Jobs\SendMailUserJob;
 use App\Mail\SendEmailMailable;
 use App\Mail\SendEmailRecruiterMailable;
+use App\Model\Group_Job_Category;
 use App\Model\Info_candidate;
+use App\Model\Job_Category;
+use App\Model\Location;
 use App\Model\Recruiter;
 use App\Model\Status_candidate_profile;
 use Carbon\Carbon;
@@ -18,17 +21,19 @@ use App\Model\Account_Recruiter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
-trait myInternet {
+trait myInternet
+{
 
     public function is_connected()
     {
         $connected = @fsockopen("www.example.com", 80);
         //website, port  (try 80 or 443)
-        if ($connected){
+        if ($connected) {
             $is_conn = true; //action when connected
             fclose($connected);
-        }else{
+        } else {
             $is_conn = false; //action in connection failure
         }
         return $is_conn;
@@ -37,11 +42,66 @@ trait myInternet {
 
 class UserController extends Controller
 {
-    public function index(){
 
-        $id_candidate = auth()->user()->id;
+    public function __construct()
+    {
+        $top_rate = DB::select('SELECT post_news.*, recruiter.* , level_salary.name_level_salary, type_work.name_type_work
+                               FROM post_news
+                               JOIN status_candidate_profile, recruiter, level_salary, type_work
+                               WHERE post_news.id_posts = status_candidate_profile.id_post_news
+                               AND post_news.status_post = 1
+                               AND post_news.id_account_recruiter = recruiter.id_account_recruiter
+                               AND post_news.id_level_salary = level_salary.id
+                               AND post_news.id_type_work = type_work.id
+                               GROUP BY status_candidate_profile.id_post_news
+                               ORDER BY COUNT(*) desc LIMIT 3');
 
-        $checkCreateNewInfo = Info_candidate::where('id_users', '=', $id_candidate)->exists();
+        $location_job = DB::select('SELECT location_work ,COUNT(*) as count
+                                   FROM post_news
+                                   WHERE post_news.status_post = 1
+                                   GROUP BY location_work
+                                   ORDER BY count DESC;');
+
+
+
+        $category_job = DB::select('SELECT group_job_category.name_group_category, job_category.name_job_category,  COUNT(*) as count
+                                   FROM group_job_category
+                                   JOIN job_category
+                                   WHERE group_job_category.id = job_category.id_group_category
+                                   GROUP BY group_job_category.name_group_category
+                                   ORDER BY group_job_category.name_group_category desc');
+
+        $saved_jobs = DB::table('saved_jobs')->get();
+
+        //Get Location
+        $location = Location::all();
+
+        //Job Category
+        $all_job_category = Job_Category::all();
+
+        // Sharing is caring
+        View::share(compact('location_job',
+            'top_rate',
+            'category_job',
+            'saved_jobs',
+            'location',
+            'all_job_category'
+        ));
+    }
+
+    public function index()
+    {
+
+
+        //Get Job Group Categories
+        $group_job_category = Group_Job_Category::all();
+
+
+
+
+        if (!Auth::guest()) {
+            $id_candidate = auth()->user()->id;
+            $checkCreateNewInfo = Info_candidate::where('id_users', '=', $id_candidate)->exists();
             if ($checkCreateNewInfo == 1) {
 
                 // user info found . Do something.
@@ -54,52 +114,84 @@ class UserController extends Controller
                         'id_users' => $id_candidate
                     ]);
             }
+        }
 
-        $post_news_by_date = DB::table('post_news','type_work','recruiter','level_salary','languages_profile','qualification','level')
+
+        $post_news_by_date = DB::table('post_news', 'type_work', 'recruiter', 'level_salary', 'languages_profile', 'qualification', 'level')
             ->join('recruiter', 'post_news.id_account_recruiter', '=', 'recruiter.id_account_recruiter')
             ->join('type_work', 'type_work.id', '=', 'post_news.id_type_work')
             ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
-            ->join('languages_profile','languages_profile.id','=','post_news.id_languages_profile')
-            ->join('qualification','qualification.id','=','post_news.id_qualification')
-            ->join('level','level.id', '=', 'post_news.id_level')
-            ->select('post_news.*','recruiter.*', 'type_work.name_type_work',
-                'level_salary.name_level_salary','languages_profile.name_languages_profile','qualification.name_qualification',
+            ->join('languages_profile', 'languages_profile.id', '=', 'post_news.id_languages_profile')
+            ->join('qualification', 'qualification.id', '=', 'post_news.id_qualification')
+            ->join('level', 'level.id', '=', 'post_news.id_level')
+            ->select('post_news.*', 'recruiter.*', 'type_work.name_type_work',
+                'level_salary.name_level_salary', 'languages_profile.name_languages_profile', 'qualification.name_qualification',
                 'level.name_level')
-            ->orderBy('time_for_submission','DESC')
-            ->get();
+            ->where('status_post','=',1)
+            ->orderBy('id_service_pack','ASC')
+            ->orderBy('date_posted', 'DESC')
+            ->paginate(10);
 
-        $top_rate = DB::select('SELECT post_news.*, recruiter.* , level_salary.name_level_salary, type_work.name_type_work
-                               FROM post_news
-                               JOIN status_candidate_profile, recruiter, level_salary, type_work
-                               WHERE post_news.id_posts = status_candidate_profile.id_post_news
-                               AND post_news.id_account_recruiter = recruiter.id_account_recruiter
-                               AND post_news.id_level_salary = level_salary.id
-                               AND post_news.id_type_work = type_work.id
-                               GROUP BY status_candidate_profile.id_post_news
-                               ORDER BY COUNT(*) desc LIMIT 3');
+        $post_news_by_full_time = DB::table('post_news', 'type_work', 'recruiter', 'level_salary', 'languages_profile', 'qualification', 'level')
+            ->join('recruiter', 'post_news.id_account_recruiter', '=', 'recruiter.id_account_recruiter')
+            ->join('type_work', 'type_work.id', '=', 'post_news.id_type_work')
+            ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
+            ->join('languages_profile', 'languages_profile.id', '=', 'post_news.id_languages_profile')
+            ->join('qualification', 'qualification.id', '=', 'post_news.id_qualification')
+            ->join('level', 'level.id', '=', 'post_news.id_level')
+            ->select('post_news.*', 'recruiter.*', 'type_work.name_type_work',
+                'level_salary.name_level_salary', 'languages_profile.name_languages_profile', 'qualification.name_qualification',
+                'level.name_level')
+            ->where('status_post','=',1)
+            ->whereIn('id_type_work', [1, 2])
+            ->orderBy('id_service_pack','ASC')
+            ->paginate(10);
 
-        $location_job = DB::select('SELECT location_work ,COUNT(*) as count
-                                   FROM post_news
-                                   GROUP BY location_work
-                                   ORDER BY count DESC;');
+        $post_news_by_part_time = DB::table('post_news', 'type_work', 'recruiter', 'level_salary', 'languages_profile', 'qualification', 'level')
+            ->join('recruiter', 'post_news.id_account_recruiter', '=', 'recruiter.id_account_recruiter')
+            ->join('type_work', 'type_work.id', '=', 'post_news.id_type_work')
+            ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
+            ->join('languages_profile', 'languages_profile.id', '=', 'post_news.id_languages_profile')
+            ->join('qualification', 'qualification.id', '=', 'post_news.id_qualification')
+            ->join('level', 'level.id', '=', 'post_news.id_level')
+            ->select('post_news.*', 'recruiter.*', 'type_work.name_type_work',
+                'level_salary.name_level_salary', 'languages_profile.name_languages_profile', 'qualification.name_qualification',
+                'level.name_level')
+            ->where('status_post','=',1)
+            ->whereIn('id_type_work', [3, 4])
+            ->orderBy('id_service_pack','ASC')
+            ->paginate(10);
 
-        $category_job = DB::select('SELECT group_job_category.name_group_category, job_category.name_job_category,  COUNT(*) as count
-                                   FROM group_job_category
-                                   JOIN job_category
-                                   WHERE group_job_category.id = job_category.id_group_category
-                                   GROUP BY group_job_category.name_group_category
-                                   ORDER BY group_job_category.name_group_category desc');
+        $post_news_by_internship = DB::table('post_news', 'type_work', 'recruiter', 'level_salary', 'languages_profile', 'qualification', 'level')
+            ->join('recruiter', 'post_news.id_account_recruiter', '=', 'recruiter.id_account_recruiter')
+            ->join('type_work', 'type_work.id', '=', 'post_news.id_type_work')
+            ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
+            ->join('languages_profile', 'languages_profile.id', '=', 'post_news.id_languages_profile')
+            ->join('qualification', 'qualification.id', '=', 'post_news.id_qualification')
+            ->join('level', 'level.id', '=', 'post_news.id_level')
+            ->select('post_news.*', 'recruiter.*', 'type_work.name_type_work',
+                'level_salary.name_level_salary', 'languages_profile.name_languages_profile', 'qualification.name_qualification',
+                'level.name_level')
+            ->where('status_post','=',1)
+            ->whereIn('id_type_work', [5])
+            ->orderBy('id_service_pack','ASC')
+            ->paginate(10);
 
         return view('user.index')
-            ->with('post_news_by_date', $post_news_by_date)
-            ->with('top_rate',$top_rate)
-            ->with('location_job',$location_job)
-            ->with('category_job',$category_job);
+            ->with(compact('post_news_by_date',
+                'key_skills_selected',
+                'job_level',
+                'group_job_category',
+                'post_news_by_full_time',
+                'post_news_by_part_time',
+                'post_news_by_internship'
 
+            ));
 
     }
 
-    public function about(){
+    public function about()
+    {
 
 //        $post_news = Account_Recruiter::find(1)->post_news;
 //
@@ -109,66 +201,126 @@ class UserController extends Controller
 //        }
 
         $url = Storage::url('cv/nguyen_thanh_tam_1534951924.pdf');
-        return 'Result: '.$url;
+        return 'Result: ' . $url;
 //        return view('user.about');
     }
-    public function blog(){
+
+    public function blog()
+    {
         return view('user.blog');
     }
-    public function category(){
-        $top_rate = DB::select('SELECT post_news.*, recruiter.* , level_salary.name_level_salary, type_work.name_type_work
-                               FROM post_news
-                               JOIN status_candidate_profile, recruiter, level_salary, type_work
-                               WHERE post_news.id_posts = status_candidate_profile.id_post_news
-                               AND post_news.id_account_recruiter = recruiter.id_account_recruiter
-                               AND post_news.id_level_salary = level_salary.id
-                               AND post_news.id_type_work = type_work.id
-                               GROUP BY status_candidate_profile.id_post_news
-                               ORDER BY COUNT(*) desc LIMIT 3');
 
-        $location_job = DB::select('SELECT location_work ,COUNT(*) as count
-                                   FROM post_news
-                                   GROUP BY location_work
-                                   ORDER BY count DESC;');
+    public function category()
+    {
+        return view('user.category');
 
-        $category_job = DB::select('SELECT group_job_category.name_group_category, job_category.name_job_category,  COUNT(*) as count
-                                   FROM group_job_category
-                                   JOIN job_category
-                                   WHERE group_job_category.id = job_category.id_group_category
-                                   GROUP BY group_job_category.name_group_category
-                                   ORDER BY group_job_category.name_group_category desc');
+    }
+
+    public function search_category_quick(Request $request, $category_name)
+    {
+
+        $category_search_quick = DB::table('post_news')->whereRaw("MATCH(name_job_category) AGAINST('" . $category_name . "')")
+            ->join('type_work', 'post_news.id_type_work', '=', 'type_work.id')
+            ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
+            ->join('recruiter', 'recruiter.id_account_recruiter', '=', 'post_news.id_account_recruiter')
+            ->where('status_post','=',1)
+            ->orderBy('id_service_pack','ASC')
+            ->paginate(10);
 
         return view('user.category')
-            ->with('top_rate',$top_rate)
-            ->with('location_job',$location_job)
-            ->with('category_job',$category_job);
+            ->with(compact('category_search_quick'
+            ));
+//        return ''.$category_search_quick;
     }
-    public function contact(){
+
+    public function contact()
+    {
         return view('user.contact');
     }
-    public function search(){
-        return view('user.search');
-    }
-    public function details($id){
 
-        $post_news = DB::table('post_news','type_work','recruiter','level_salary','languages_profile','qualification','level')
+    public function search(Request $request)
+    {
+        $search = $request->get('search');
+        $select_area_search = $request->get('select_area_search');
+        $select_category_search = $request->get('select_category_search');
+
+        if ($select_area_search == '-1') {
+            $all = $search . $select_category_search;
+            $category_search_custom = DB::table('post_news')
+                ->whereRaw("MATCH(name_job_category) AGAINST('" . $all . "')")
+                ->orWhereRaw("MATCH(skills) AGAINST('" . $all . "')")
+                ->orwhereRaw("MATCH(job_title) AGAINST('" . $all . "')")
+                ->join('type_work', 'post_news.id_type_work', '=', 'type_work.id')
+                ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
+                ->join('recruiter', 'recruiter.id_account_recruiter', '=', 'post_news.id_account_recruiter')
+                ->orderBy('id_service_pack','ASC')
+                ->paginate(10);
+
+        } else if ($select_category_search == '-1') {
+            $all = $search . $select_area_search;
+            $category_search_custom = DB::table('post_news')
+                ->whereRaw("MATCH(location_work) AGAINST('" . $all . "')")
+                ->orwhereRaw("MATCH(job_title) AGAINST('" . $all . "')")
+                ->orWhereRaw("MATCH(skills) AGAINST('" . $all . "')")
+                ->join('type_work', 'post_news.id_type_work', '=', 'type_work.id')
+                ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
+                ->join('recruiter', 'recruiter.id_account_recruiter', '=', 'post_news.id_account_recruiter')
+                ->orderBy('id_service_pack','ASC')
+                ->paginate(10);
+
+        } else if ($search == '') {
+            $all = $search . $select_area_search;
+            $category_search_custom = DB::table('post_news')
+                ->whereRaw("MATCH(name_job_category) AGAINST('" . $all . "')")
+                ->orWhereRaw("MATCH(location_work) AGAINST('" . $all . "')")
+                ->join('type_work', 'post_news.id_type_work', '=', 'type_work.id')
+                ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
+                ->join('recruiter', 'recruiter.id_account_recruiter', '=', 'post_news.id_account_recruiter')
+                ->orderBy('id_service_pack','ASC')
+                ->paginate(10);
+        } else {
+            $all = $search . $select_category_search . $select_area_search;
+            $category_search_custom = DB::table('post_news')
+                ->whereRaw("MATCH(skills) AGAINST('" . $all . "')")
+                ->orwhereRaw("MATCH(job_title) AGAINST('" . $all . "')")
+                ->orWhereRaw("MATCH(location_work) AGAINST('" . $all . "')")
+                ->orWhereRaw("MATCH(name_job_category) AGAINST('" . $all . "')")
+                ->join('type_work', 'post_news.id_type_work', '=', 'type_work.id')
+                ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
+                ->join('recruiter', 'recruiter.id_account_recruiter', '=', 'post_news.id_account_recruiter')
+                ->orderBy('id_service_pack','ASC')
+                ->paginate(10);
+        }
+
+
+
+
+        return view('user.search')
+            ->with(compact('category_search_custom'
+            ));
+    }
+
+    public function details($id)
+    {
+
+        $post_news = DB::table('post_news', 'type_work', 'recruiter', 'level_salary', 'languages_profile', 'qualification', 'level')
             ->join('recruiter', 'post_news.id_account_recruiter', '=', 'recruiter.id_account_recruiter')
             ->join('type_work', 'type_work.id', '=', 'post_news.id_type_work')
             ->join('level_salary', 'level_salary.id', '=', 'post_news.id_level_salary')
-            ->join('languages_profile','languages_profile.id','=','post_news.id_languages_profile')
-            ->join('qualification','qualification.id','=','post_news.id_qualification')
-            ->join('level','level.id', '=', 'post_news.id_level')
-            ->select('post_news.*','recruiter.*', 'type_work.name_type_work',
-                'level_salary.name_level_salary','languages_profile.name_languages_profile','qualification.name_qualification',
+            ->join('languages_profile', 'languages_profile.id', '=', 'post_news.id_languages_profile')
+            ->join('qualification', 'qualification.id', '=', 'post_news.id_qualification')
+            ->join('level', 'level.id', '=', 'post_news.id_level')
+            ->select('post_news.*', 'recruiter.*', 'type_work.name_type_work',
+                'level_salary.name_level_salary', 'languages_profile.name_languages_profile', 'qualification.name_qualification',
                 'level.name_level')
             ->where('post_news.id_posts', '=', $id)
             ->get();
 
         $info_candidate = null;
-        if(!Auth::guest()){
-            $info_candidate = DB::table('info_candidate','users')
-                ->join('users','info_candidate.id_users', '=', 'users.id')
-                ->select('info_candidate.*','users.*')
+        if (!Auth::guest()) {
+            $info_candidate = DB::table('info_candidate', 'users')
+                ->join('users', 'info_candidate.id_users', '=', 'users.id')
+                ->select('info_candidate.*', 'users.*')
                 ->where('users.id', '=', auth()->user()->id)
                 ->get();
         }
@@ -184,11 +336,13 @@ class UserController extends Controller
        * Check connect Internet
     */
     use myInternet;
-    public function applyJob(Request $request){
+
+    public function applyJob(Request $request)
+    {
 
         $id_candidate = null;
         static $fileNameToStore;
-        if(!Auth::guest() && ($this->is_connected() == 1)) {
+        if (!Auth::guest() && ($this->is_connected() == 1)) {
 
             //Get data from apply form
             $id_account_recruiter = $request->input('id_account_recruiter');
@@ -207,21 +361,24 @@ class UserController extends Controller
             $jobTitle = $post_news->job_title;
 
             $info_candidate = Info_candidate::find($id_candidate);
-            $full_name = $info_candidate->last_name. " " .$info_candidate->first_name;
+            $full_name = $info_candidate->last_name . " " . $info_candidate->first_name;
             $file_name_cv = $info_candidate->cv;
 
             if ($_POST['optradio'] == "fileUpload") {
 
-                $this->validate($request,[
+                $this->validate($request, [
                     'fileToUpload' => 'required|max:1999|mimes:doc,pdf,docx,zip'
                 ]);
 
-                if($this->check_ApplyJob_Exists($id_candidate,$id_post) != 1) {
+                if ($this->check_ApplyJob_Exists($id_candidate, $id_post) != 1) {
 
-                    $cv_exists = Storage::disk('cv')->exists('nguyen_thanh_tam_1534951924.pdf');
+                    $cv_exists = Storage::disk('cv')->exists($file_name_cv);
 
                     if ($request->file('fileToUpload')->isValid()) {
 
+                        if($cv_exists == 1){
+                            Storage::disk('cv')->delete($file_name_cv); // Delete leftover
+                        }
                         //Handle File Upload
                         $fileUpload = $request->file('fileToUpload');
                         //File Name with the extension
@@ -231,9 +388,9 @@ class UserController extends Controller
                         //Get just ext
                         $extension = $fileUpload->getClientOriginalExtension();
                         //FileName to store
-                        $fileNameToStore = $fileName.'_'.time().'.'.$extension;
+                        $fileNameToStore = $fileName . '_' . time() . '.' . $extension;
                         //Upload file
-                        $path = $request->file('fileToUpload')->storeAs('public/cv', $fileNameToStore);
+                        $request->file('fileToUpload')->storeAs('public/cv', $fileNameToStore);
 
                     }
 
@@ -265,14 +422,12 @@ class UserController extends Controller
                         ->delay(now()->addSeconds(20));
 
                     return back()->with('success', 'Apply job with file upload ! ');
+                } else {
+                    return back()->with('error', 'You have already applied for this company. Please check the information !');
                 }
-                else {
-                    return back()->with('error','You have already applied for this company. Please check the information !');
-                }
-            }
-            else if ($_POST['optradio'] == "existsCV") {
+            } else if ($_POST['optradio'] == "existsCV") {
 
-                if($this->check_ApplyJob_Exists($id_candidate,$id_post) != 1){
+                if ($this->check_ApplyJob_Exists($id_candidate, $id_post) != 1) {
 
                     //Create Status_candidate_profile
                     $status_candidate_profile = new Status_candidate_profile;
@@ -293,33 +448,114 @@ class UserController extends Controller
                     SendMailRecruiterJob::dispatch()
                         ->delay(now()->addSeconds(20));
 
-                    return back()->with('success','Apply job with cv exists ! ');
-                }
-                else {
-                    return back()->with('error','You have already applied for this company. Please check the information !');
+                    return back()->with('success', 'Apply job with cv exists ! ');
+                } else {
+                    return back()->with('error', 'You have already applied for this company. Please check the information !');
                 }
 
             }
-        }
-        else {
-            return back()->with('error','Please check your connection to internet');
+        } else {
+            return back()->with('error', 'Please check your connection to internet');
         }
 
         return back();
     }
 
     //Use for check status apply job of candidate
-    public function check_ApplyJob_Exists($id_candidate, $id_post_news){
+    public function check_ApplyJob_Exists($id_candidate, $id_post_news)
+    {
 
         $flags = DB::table('status_candidate_profile')
-            ->where('id_candidate','=' , $id_candidate)
-            ->where('id_post_news','=', $id_post_news)
+            ->where('id_candidate', '=', $id_candidate)
+            ->where('id_post_news', '=', $id_post_news)
             ->first();
-        if($flags){
+        if ($flags) {
             return 1;
-        }
-        else
+        } else
             return 0;
+    }
+
+    public function replace_resume_cv(Request $request){
+
+        $this->validate($request, [
+            'file_replace_resume_cv' => 'required|max:1999'
+        ]);
+
+        $id_candidate = auth()->user()->id;
+        $info_candidate = Info_candidate::find($id_candidate);
+
+        if($request->hasFile('file_replace_resume_cv')){
+            if ($request->file('file_replace_resume_cv')->isValid()) {
+
+
+                $file_name_cv = $info_candidate->cv;
+                $cv_exists = Storage::disk('cv')->exists($file_name_cv);
+
+                if($cv_exists == 1){
+                    Storage::disk('cv')->delete($file_name_cv); // Delete leftover
+                }
+                //Handle File Upload
+                $fileUpload = $request->file('file_replace_resume_cv');
+                //File Name with the extension
+                $fileNameWithExt = $fileUpload->getClientOriginalName();
+                //Get just filename
+                $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+                //Get just ext
+                $extension = $fileUpload->getClientOriginalExtension();
+                //FileName to store
+                $fileNameToStore = $fileName . '_' . time() . '.' . $extension;
+                //Upload file
+                $request->file('file_replace_resume_cv')->storeAs('public/cv', $fileNameToStore);
+
+                //Update Info_candidate
+                DB::table('info_candidate')
+                    ->where('id', $id_candidate)
+                    ->update([
+                        'cv' => $fileNameToStore,
+                        'datetime_upload_cv' => now()
+                    ]);
+                return back()->with('success','Replace resume successful !!!');
+            } else {
+                return back()->with('error','Please check again type file input !!!');
+            }
+        } else {
+            return back()->with('error','File Not Found !!!');
+        }
+
+    }
+
+    public function saved_jobs(Request $request)
+    {
+
+        $id_candidate = $request->get('id_candidate');
+        $id_post_news = $request->get('id_post_news');
+
+        $check_saved_jobs_exists = DB::table('saved_jobs')
+            ->where('id_candidate','=',$id_candidate)
+            ->where('id_post_news','=',$id_post_news)
+            ->exists();
+
+        if($check_saved_jobs_exists === false){
+            DB::table('saved_jobs')
+                ->insert([
+                    'id_candidate' => $id_candidate,
+                    'id_post_news' => $id_post_news
+                ]);
+        }
+    }
+
+    public function check_job_saved()
+    {
+
+//        $id_candidate = auth()->user()->id;
+//        $flags = DB::table('saved_jobs')
+//            ->where('id_candidate', '=', $id_candidate)
+//            ->where('id_post_news', '=', $id_post_news)
+//            ->first();
+//        if ($flags) {
+//            return 1;
+//        } else
+//            return 0;
     }
 
 }
