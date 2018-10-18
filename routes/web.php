@@ -86,6 +86,7 @@ Route::post('/admin/dashbroad/search','RecruitController@search_post');
 Route::get('/admin/login','RecruitController@login');
 Route::post('/admin/login','RecruitController@login');
 Route::get('/admin/register','RecruitController@register');
+Route::post('/admin/register','RecruitController@register');
 Route::get('/admin/sign_out','RecruitController@sign_out');
 Route::get('/admin/edit_post/{id}','RecruitController@edit_post');
 Route::get('/admin/delete_post/{id}','RecruitController@delete_post');

@@ -1,6 +1,6 @@
 <aside class="menu-sidebar2">
     <div class="logo" style="background-color: #343a40">
-        <a href="/"><img src="{{ asset('img/logo.png') }}" alt="" title=""></a>
+        <a href="../admin/dashbroad"><img src="{{ asset('img/logo.png') }}" alt="" title=""></a>
     </div>
     @if(isset($data_recruit_info))
         @foreach($data_recruit_info as $recruit_info)

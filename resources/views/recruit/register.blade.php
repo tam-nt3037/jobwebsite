@@ -22,6 +22,7 @@
     background-attachment:fixed;
     background-repeat: no-repeat;
     background-size: cover; ">
+        @include('inc.messages')
         <div class="container">
             <div class="row">
 
@@ -58,7 +59,7 @@
                             </form>
                             <div class="dropdown-divider"></div>
                             <div class="text-right">
-                                <a style="text-decoration: none;" href="#">Forgot password?</a>
+                                {{--<a style="text-decoration: none;" href="">Forgot password?</a>--}}
                             </div>
                         </div>
                     </div>
@@ -70,7 +71,7 @@
 
                         <div class="card-body">
 
-                            <form action="/register" method="post">
+                            <form action="/admin/register" method="post">
                                 {{ csrf_field() }}
 
                                 <fieldset class="scheduler-border">
@@ -78,17 +79,17 @@
                                     <legend class="scheduler-border">Account</legend>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-4 col-form-label text-md-right" for="email">Email:</label>
+                                        <label class="col-sm-4 col-form-label text-md-right" for="emailReg">Email:</label>
                                         <div class="col-md-6">
-                                            <input type="email" class="form-control" id="email" name="email">
+                                            <input type="email" class="form-control" id="emailReg" name="emailReg" value="{{old('emailReg')}}">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-4 col-form-label text-md-right"
-                                               for="password">Password:</label>
+                                               for="passwordReg">Password:</label>
                                         <div class="col-md-6">
-                                            <input type="password" class="form-control" id="password" name="password">
+                                            <input type="password" class="form-control" id="passwordReg" name="passwordReg" value="{{old('passwordReg')}}">
                                         </div>
                                     </div>
 
@@ -97,7 +98,7 @@
                                                for="password_confirmation">Password Confirmation:</label>
                                         <div class="col-md-6">
                                             <input type="password" class="form-control" id="password_confirmation"
-                                                   name="password_confirmation">
+                                                   name="password_confirmation" value="{{old('password_confirmation')}}">
                                         </div>
                                     </div>
 
@@ -112,7 +113,7 @@
                                             name:</label>
                                         <div class="col-md-6">
                                             <input type="text" class="form-control" id="company_name"
-                                                   name="company_name">
+                                                   name="company_name" value="{{old('company_name')}}">
                                         </div>
                                     </div>
 
@@ -121,7 +122,7 @@
                                             name:</label>
                                         <div class="col-md-6">
                                             <input type="text" class="form-control" id="contact_person_name"
-                                                   name="contact_person_name">
+                                                   name="contact_person_name" value="{{old('contact_person_name')}}">
                                         </div>
                                     </div>
 
@@ -130,7 +131,7 @@
                                             number:</label>
                                         <div class="col-md-6">
                                             <input type="text" class="form-control" id="contact_phone_number"
-                                                   name="contact_phone_number">
+                                                   name="contact_phone_number" value="{{old('contact_phone_number')}}">
                                         </div>
                                     </div>
 
@@ -139,7 +140,7 @@
                                             address:</label>
                                         <div class="col-md-6">
                                             <input type="text" class="form-control" id="company_address"
-                                                   name="company_address">
+                                                   name="company_address" value="{{old('company_address')}}">
                                         </div>
                                     </div>
 
@@ -147,17 +148,17 @@
                                         <label class="col-sm-4 col-form-label text-md-right" for="company_city">City/Province:</label>
                                         <div class="col-md-6">
                                             <input type="text" class="form-control" id="company_city"
-                                                   name="company_city">
+                                                   name="company_city" value="{{old('company_city')}}">
                                         </div>
                                     </div>
 
                                 </fieldset>
 
                                 <div class="form-check text-center" style="padding-bottom: 10px; font-size: 16px">
-                                    <input type="checkbox" class="form-check-input" id="agree">
+                                    <input type="checkbox" class="form-check-input" id="agree" name="agree">
                                     <label class="form-check-label" for="agree"> <span style="padding-left: 20px">Agree with <a
-                                                    href="#" style="text-decoration: none;">Privacy policy</a> & <a
-                                                    href="#" style="text-decoration: none;">Terms of use</a> of Job Listing</span>
+                                                    href="" style="text-decoration: none;">Privacy policy</a> & <a
+                                                    href="" style="text-decoration: none;">Terms of use</a> of Job Listing</span>
                                     </label>
                                 </div>
 

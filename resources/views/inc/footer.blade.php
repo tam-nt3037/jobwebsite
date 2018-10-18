@@ -46,10 +46,10 @@
                     <div class="single-footer-widget mail-chimp">
                         <h6 class="mb-20">Tools</h6>
                         <ul class="footer-nav">
-                            <li><a href="my-career-center/my-profile">My Profile</a></li>
-                            <li><a href="my-career-center/my-profile">My Resumes</a></li>
-                            <li><a href="my-career-center/my-profile">My Jobs</a></li>
-                            <li><a href="my-career-center/my-profile">My Applied Jobs</a></li>
+                            <li><a href="../my-career-center/my-profile">My Profile</a></li>
+                            <li><a href="../my-career-center/my-profile">My Resumes</a></li>
+                            <li><a href="../my-career-center/my-profile">My Jobs</a></li>
+                            <li><a href="../my-career-center/my-profile">My Applied Jobs</a></li>
                         </ul>
                     </div>
                 </div>

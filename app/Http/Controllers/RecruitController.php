@@ -27,15 +27,80 @@ class RecruitController extends Controller
     }
 
 
-    public function sign_out(Request $request){
+    public function sign_out(Request $request)
+    {
 
         $request->session()->forget('recruitID');
         return redirect('admin/register');
     }
 
-    public function register()
+    public function register(Request $request)
     {
 
+
+        if ($request->isMethod('POST')) {
+            $email = $request->input('emailReg');
+            $password = $request->input('passwordReg');
+            $password_confirmation = $request->input('password_confirmation');
+            $company_name = $request->input('company_name');
+            $contact_person_name = $request->input('contact_person_name');
+            $contact_phone_number = $request->input('contact_phone_number');
+            $company_address = $request->input('company_address');
+            $company_city = $request->input('company_city');
+            $agree = $request->input('agree');
+
+            $this->validate($request, [
+                'agree' => 'required',
+                'emailReg' => 'required',
+                'passwordReg' => 'required',
+                'password_confirmation' => 'required',
+                'company_name' => 'required',
+                'contact_person_name' => 'required',
+                'contact_phone_number' => 'required',
+                'company_address' => 'required',
+                'company_city' => 'required',
+
+            ]);
+
+            $check_email_exist = DB::table('account_recruiter')->where('email', '=', $email)->exists();
+
+            if ($password != $password_confirmation) {
+                return back()->withInput()->with('error', 'Your password and confirmation not match');
+            } else if ($check_email_exist == true && $password == $password_confirmation) {
+                return back()->withInput()->with('error', 'This email already exists. Please choose another email ');
+            } else {
+
+                DB::table('account_recruiter')->insert([
+                    'email' => $email,
+                    'password' => Hash::make($password),
+                    'created_at' => now()
+
+                ]);
+
+                $account_recruiter = DB::table('account_recruiter')
+                    ->where('email', '=', $email)
+                    ->select('id')
+                    ->first();
+
+                DB::table('recruiter')->insert([
+                    'id_account_recruiter' => $account_recruiter->id,
+                    'contact_name' => $contact_person_name,
+                    'contact_phone_number' => $contact_phone_number,
+                    'company_name' => $company_name,
+                    'company_address' => $company_address,
+                    'created_at' => now()
+
+                ]);
+
+                $check_email_exist = DB::table('recruiter')->where('id_account_recruiter', '=', $account_recruiter->id)->exists();
+                if ($check_email_exist == true) {
+                    return back()->withInput()->with('success', 'Your account have created successful.');
+                } else {
+                    return back()->withInput()->with('error', 'Your account have created failure.');
+                }
+
+            }
+        }
 
         return view('recruit.register');
     }
@@ -51,7 +116,7 @@ class RecruitController extends Controller
 
         $validate_email_recruit = DB::table('account_recruiter')
             ->where('email', '=', $email)
-            ->select('email', 'password','id')
+            ->select('email', 'password', 'id')
             ->first();
 
         $recruitId = $validate_email_recruit->id;
@@ -79,13 +144,14 @@ class RecruitController extends Controller
             return 0;
     }
 
-    public function account_info(Request $request){
+    public function account_info(Request $request)
+    {
 
         $recruitId = $request->session()->get('recruitID');
 
-        if($request->isMethod('PUT')){
+        if ($request->isMethod('PUT')) {
 
-            $this->validate($request,[
+            $this->validate($request, [
                 'companyName' => 'required|max:255',
                 'contactName' => 'required',
             ]);
@@ -109,7 +175,7 @@ class RecruitController extends Controller
 
             return view('recruit.account_info');
         }
-        if($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
 
             $this->validate($request, [
                 'logoCompany' => 'required | mimes:jpeg,jpg,png | max:1000'
@@ -245,7 +311,7 @@ class RecruitController extends Controller
                                     JOIN languages_profile
                                     ON post_news.id_languages_profile = languages_profile.id
 
-                                    WHERE post_news.id_account_recruiter = '.$recruitId.'
+                                    WHERE post_news.id_account_recruiter = ' . $recruitId . '
                                     -- post_news.status_post : news delete or not (2 = deleted)
                                     AND post_news.status_post = 1 
                                     GROUP BY post_news.job_title ASC')); //$query is raw SQL query say SELECT * FROM a LEFT JOIN b on a.id = b.a_id GROUP BY a.id
@@ -257,7 +323,7 @@ class RecruitController extends Controller
                                     ON users.id = status_candidate_profile.id_candidate 
                                     JOIN info_candidate
                                     ON info_candidate.id = status_candidate_profile.id_candidate                               
-                                    WHERE status_candidate_profile.id_account_recruiter = '.$recruitId.'');
+                                    WHERE status_candidate_profile.id_account_recruiter = ' . $recruitId . '');
 
 
         return view('recruit.dashbroad')->with('total_job', $total_job)
@@ -355,6 +421,8 @@ class RecruitController extends Controller
     public function store(Request $request)
     {
 
+        $recruitId = $request->session()->get('recruitID');
+
         $job_title = $request->job_title;
         $number_recruits = $request->number_recruits;
         $id_level = $request->id_level;
@@ -375,6 +443,7 @@ class RecruitController extends Controller
 
 
         $post_news = new Post_News;
+        $post_news->id_account_recruiter = $recruitId;
         $post_news->job_title = $job_title;
         $post_news->number_recruits = $number_recruits;
         $post_news->id_level = $id_level;
