@@ -191,66 +191,8 @@
                                 <hr>
 
                                 @if(isset($post_news_for_saved_jobs))
-                                    @foreach($post_news_for_saved_jobs as $post_news_for_saved_job)
-                                        <form method="POST" action="" id="form-unsave" name="form-unsave">
-                                            @csrf
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <img src="{{asset('img/elements/a.jpg')}}" alt="" class="rounded"
-                                                         width="125px"
-                                                         height="75px">
-                                                </div>
-                                                <div class="col-sm-5">
-                                                    <input type="text" name="id_posts"
-                                                           value="{{$post_news_for_saved_job->id_posts}}" hidden/>
-                                                    <a href="/details/{{$post_news_for_saved_job->id_posts}}">
-                                                        <h5>{{$post_news_for_saved_job->job_title}}</h5></a>
-                                                    <p class="address"><span class="lnr lnr-clock"></span>
-                                                        <b>{{$post_news_for_saved_job->time_for_submission}}</b></p>
-                                                    <h5 class="text-muted">
-                                                        Company: {{$post_news_for_saved_job->company_name}}</h5>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="row">
-                                                        <a href="/details/{{$post_news_for_saved_job->id_posts}}"
-                                                           class="text-light">
-                                                            <button type="button" class="btn btn-warning">
-                                                                <span class="glyphicon glyphicon-hand-right"></span>
-                                                                Apply
-                                                            </button>
-                                                        </a>
-                                                        <input type="submit" class="btn btn-outline-danger"
-                                                               name="unsave_submit" value="Unsave"/>
-
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                        </form>
-
-                                    @endforeach
-                                        <div class="row">
-                                            <div class="col-sm-4"></div>
-                                            <div class="col-sm-4">
-                                                {{$post_news_for_saved_jobs->links()}}
-                                            </div>
-                                            <div class="col-sm-4"></div>
-
-                                        </div>
-                                @else
-                                    <p>No saved jobs</p>
-                                @endif
-
-
-                            </div>
-                            <div class="col-sm-12 well well-lg post-list ">
-                                <div><h4><b>APPLIED JOBS</b></h4></div>
-                                <hr>
-
-                                @if(isset($post_news_for_applied_jobs))
-                                    @foreach($post_news_for_applied_jobs as $post_news_for_applied_job)
-                                        @if($post_news_for_applied_job->id_candidate == auth()->user()->id)
+                                    @if(count($post_news_for_saved_jobs) > 0)
+                                        @foreach($post_news_for_saved_jobs as $post_news_for_saved_job)
                                             <form method="POST" action="" id="form-unsave" name="form-unsave">
                                                 @csrf
                                                 <div class="row">
@@ -262,7 +204,69 @@
                                                     </div>
                                                     <div class="col-sm-5">
                                                         <input type="text" name="id_posts"
-                                                               value="{{$post_news_for_applied_job->id_post_news}}" hidden/>
+                                                               value="{{$post_news_for_saved_job->id_posts}}" hidden/>
+                                                        <a href="/details/{{$post_news_for_saved_job->id_posts}}">
+                                                            <h5>{{$post_news_for_saved_job->job_title}}</h5></a>
+                                                        <p class="address"><span class="lnr lnr-clock"></span>
+                                                            <b>{{$post_news_for_saved_job->time_for_submission}}</b></p>
+                                                        <h5 class="text-muted">
+                                                            Company: {{$post_news_for_saved_job->company_name}}</h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="row">
+                                                            <a href="/details/{{$post_news_for_saved_job->id_posts}}"
+                                                               class="text-light">
+                                                                <button type="button" class="btn btn-warning">
+                                                                    <span class="glyphicon glyphicon-hand-right"></span>
+                                                                    Apply
+                                                                </button>
+                                                            </a>
+                                                            <input type="submit" class="btn btn-outline-danger"
+                                                                   name="unsave_submit" value="Unsave"/>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </form>
+
+                                        @endforeach
+                                        <div class="row">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-4">
+                                                {{$post_news_for_saved_jobs->links()}}
+                                            </div>
+                                            <div class="col-sm-4"></div>
+
+                                        </div>
+                                    @else
+                                        <p>No saved jobs</p>
+                                    @endif
+                                @endif
+
+
+                            </div>
+                            <div class="col-sm-12 well well-lg post-list ">
+                                <div><h4><b>APPLIED JOBS</b></h4></div>
+                                <hr>
+
+                                @if(isset($post_news_for_applied_jobs))
+                                    @if(count($post_news_for_applied_jobs) > 0)
+                                        @foreach($post_news_for_applied_jobs as $post_news_for_applied_job)
+                                            <form method="POST" action="" id="form-unsave" name="form-unsave">
+                                                @csrf
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <img src="{{asset('img/elements/a.jpg')}}" alt=""
+                                                             class="rounded"
+                                                             width="125px"
+                                                             height="75px">
+                                                    </div>
+                                                    <div class="col-sm-5">
+                                                        <input type="text" name="id_posts"
+                                                               value="{{$post_news_for_applied_job->id_post_news}}"
+                                                               hidden/>
                                                         <a href="/details/{{$post_news_for_applied_job->id_post_news}}">
                                                             <h5>{{$post_news_for_applied_job->job_title}}</h5></a>
                                                         <h5 class="text-muted">
@@ -283,9 +287,7 @@
                                                 </div>
                                                 <hr>
                                             </form>
-
-                                        @endif
-                                    @endforeach
+                                        @endforeach
                                         <div class="row">
                                             <div class="col-sm-4"></div>
                                             <div class="col-sm-4">
@@ -294,8 +296,9 @@
                                             <div class="col-sm-4"></div>
 
                                         </div>
-                                @else
-                                    <p>No saved jobs</p>
+                                    @else
+                                        <p>No applied jobs</p>
+                                    @endif
                                 @endif
 
                             </div>

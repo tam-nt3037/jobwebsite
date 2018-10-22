@@ -126,7 +126,7 @@
                     <a class="btn btn-primary float-right" href="/admin/dashbroad" style="font-size: 20px; float: left; padding: 10px 50px;">Back</a>
                 </div>
                 <div class="col-md-4 col-sm-4">
-                    <a href="#"><button class="btn btn-success" style="font-size: 20px; float: left; padding: 10px 50px;">Invite to interview</button></a>
+                    {{--<a href="#"><button class="btn btn-success" style="font-size: 20px; float: left; padding: 10px 50px;">Invite to interview</button></a>--}}
                 </div>
             </div>
     

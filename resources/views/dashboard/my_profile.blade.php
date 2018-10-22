@@ -713,11 +713,11 @@
                                                 </button>
 
                                                 {{--<form action="{{action('DashboardController@user_delete_languages', $languages_data_item->id)}}" method="POST">--}}
-                                                    {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
-                                                    {{--<button type="submit" class="btn btn-default btn-danger"--}}
-                                                            {{--id="btnDeleteLanguages">--}}
-                                                        {{--Delete--}}
-                                                    {{--</button>--}}
+                                                {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
+                                                {{--<button type="submit" class="btn btn-default btn-danger"--}}
+                                                {{--id="btnDeleteLanguages">--}}
+                                                {{--Delete--}}
+                                                {{--</button>--}}
                                                 {{--</form>--}}
                                                 <form method="POST">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -1061,7 +1061,7 @@
                                             {!! Form::open(['action' => ['DashboardController@user_delete_education_history', $education->id], 'id' => '' ,'method' => 'POST']) !!}
                                             {{  Form::hidden('_method','DELETE') }}
                                             <button type="submit" class="btn btn-default btn-danger"
-                                            id="">Delete
+                                                    id="">Delete
                                             </button>
                                             {!! Form::close() !!}
                                         </div>
@@ -1186,27 +1186,30 @@
 
                 {{--Modal Edit Education History--}}
             </div>{{--End Education History--}}
-            <div class="row"> {{-- Working Preferences --}}
-                <div class="card w-100">
-                    <div class="card-header">
+            @if(isset($working_preferences))
+                @if(count($working_preferences) > 0)
+                    @foreach($working_preferences as $working_preferences)
+                        <div class="row"> {{-- Working Preferences --}}
+                            <div class="card w-100">
+                                <div class="card-header">
 
-                        @if(count($working_preferences) > 0)
-                            @foreach($working_preferences as $working_preferences)
-                            @endforeach
-                        @endif
 
-                        <button class="btn btn-primary w-100 text-xl-left p-3" type="button" data-toggle="collapse"
-                                data-target="#collapseWorkingPrefer" aria-expanded="false"
-                                aria-controls="collapseExample" style="font-size: 20px;">
-                            <i class="fa fa-fw fa-list"></i> Working Preferences
-                        </button>
-                    </div>
-                    <div class="collapse card-body" id="collapseWorkingPrefer">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label for="">* Preferred Working Location</label>
-                            </div>
-                            <div class="col-sm-6 text-right pr-5">
+                                    <button class="btn btn-primary w-100 text-xl-left p-3" type="button"
+                                            data-toggle="collapse"
+                                            data-target="#collapseWorkingPrefer" aria-expanded="false"
+                                            aria-controls="collapseExample" style="font-size: 20px;">
+                                        <i class="fa fa-fw fa-list"></i> Working Preferences
+                                    </button>
+                                </div>
+                                <div class="collapse card-body" id="collapseWorkingPrefer">
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label for="">* Preferred Working Location</label>
+                                        </div>
+
+                                        <div class="col-sm-6 text-right pr-5">
+
 
                                  <span><button type="button" class="btn btn-default btn-cancel"
                                                id="btnEdit">
@@ -1217,302 +1220,11 @@
                                            data-expected-salary="{{$working_preferences->expected_salary}}"
                                            data-expected-benefits="{{$working_preferences->expected_benefits}}">
                                                 Edit</a></button></span>
-                            </div>
-                            <div class="col-sm-6 m-4"><h5
-                                        id="working_location_view">{{$working_preferences->location_work}}</h5></div>
-                            <div class="col-sm-6"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label for="">* Expected Job Category</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <label for="">* Expected Job Level</label>
-                            </div>
-                            <div class="col-sm-6 p-5"><h5
-                                        id="expect_job_category_view">{{$working_preferences->expected_job_category}}</h5>
-                            </div>
-                            <div class="col-sm-6 p-5"><h5
-                                        id="expect_job_level_view">{{$working_preferences->expected_job_level}}</h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label for="">* Expected Salary (USD per month)</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <label for=""></label>
-                            </div>
-                            <div class="col-sm-6 m-4"><h5
-                                        id="expect_job_salary_view">{{$working_preferences->expected_salary}}</h5></div>
-                            <div class="col-sm-6"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <label for="">* My Top 5 Desired Benefits</label>
-                            </div>
-                        </div>
-                        <div class="row m-2 p-4" style="border: 1px dashed">
-                            <div class="col-sm-12" id="wrap_benefits">
-                                <input type="text" id="expected_benefits_results"
-                                       value="{{$working_preferences->expected_benefits}}" hidden>
-
-                                <div class="col-sm-4">
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-default" id="Awards_View"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Awards_View" class="[ btn btn-default active ]">
-                                                Awards
-                                            </label>
-                                            <label for="fancy-checkbox-default" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
                                         </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-primary" id="Bonus_View"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Bonus_View" class="[ btn btn-default active ]">
-                                                Bonus
-                                            </label>
-                                            <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
+                                        <div class="col-sm-6 m-4"><h5
+                                                    id="working_location_view">{{$working_preferences->location_work}}</h5>
                                         </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-success" id="Canteen_View"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Canteen_View" class="[ btn btn-default active ]">
-                                                Canteen
-                                            </label>
-                                            <label for="fancy-checkbox-success" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-info" id="Health_Care_View"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Health_Care_View" class="[ btn btn-default active ]">
-                                                Healthcare Plan
-                                            </label>
-                                            <label for="fancy-checkbox-info" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-danger" id="Kindergarten_View"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-
-                                            <label for="Kindergarten_View" class="[ btn btn-default active ]">
-                                                Kindergarten
-                                            </label>
-                                            <label for="fancy-checkbox-danger" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-default" id="Laptop_View"
-                                               value="Laptop"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Laptop_View" class="[ btn btn-default active ]">
-                                                Laptop
-                                            </label>
-                                            <label for="fancy-checkbox-default" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-danger" id="Library_View"
-                                               value="Library"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-
-                                            <label for="Library_View" class="[ btn btn-default active ]">
-                                                Library
-                                            </label>
-                                            <label for="fancy-checkbox-danger" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-primary" id="Mobile_View"
-                                               value="Mobile"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Mobile_View" class="[ btn btn-default active ]">
-                                                Mobile
-                                            </label>
-                                            <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-success" id="Paid_Leave_View"
-                                               value="Paid_Leave"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Paid_Leave_View" class="[ btn btn-default active ]">
-                                                Paid Leave
-                                            </label>
-                                            <label for="fancy-checkbox-success" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-info" id="Team_Activity_View"
-                                               value="Team_Activity"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Team_Activity_View" class="[ btn btn-default active ]">
-                                                Team Activities
-                                            </label>
-                                            <label for="fancy-checkbox-info" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-default" id="Training_View"
-                                               value="Training"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Training_View" class="[ btn btn-default active ]">
-                                                Training
-                                            </label>
-                                            <label for="fancy-checkbox-default" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-primary" id="Transportation_View"
-                                               value="Transportation"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Transportation_View" class="[ btn btn-default active ]">
-                                                Transportation
-                                            </label>
-                                            <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-success"
-                                               id="Travel_Opportunities_View" value="Travel_Opportunities"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Travel_Opportunities_View"
-                                                   class="[ btn btn-default active ]">
-                                                Travel Opportunities
-                                            </label>
-                                            <label for="fancy-checkbox-success" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="[ form-group ]">
-                                        <input type="checkbox" name="fancy-checkbox-info" id="Vouchers_View"
-                                               value="Vouchers"
-                                               autocomplete="off" disabled/>
-                                        <div class="[ btn-group ]">
-                                            <label for="Vouchers_View" class="[ btn btn-default active ]">
-                                                Vouchers
-                                            </label>
-                                            <label for="fancy-checkbox-info" class="[ btn btn-info ]">
-                                                <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                <span> </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                {{--Modal Edit Working Preferences--}}
-                <div class="modal fade" id="modalFormWorkingPreferences" tabindex="-1" role="dialog"
-                     aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <!-- Modal Header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel">Working Preferences</h4>
-                                <button type="button" class="close" data-dismiss="modal">
-                                    <span aria-hidden="true">&times;</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                            </div>
-
-                            <!-- Modal Body -->
-                            <div class="modal-body">
-                                <p class="statusMsg"></p>
-                                <form role="form" method="POST">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label for="">* Preferred Working Location</label>
-                                        </div>
-                                        <div class="col-sm-6 text-right pr-5">
-                                        </div>
-                                        <div class="col-sm-12 m-1">
-                                            <select class="js-example-basic-multiple" name="states[]"
-                                                    multiple="multiple"
-                                                    style="width: 100%" aria-required="true"
-                                                    id="select_working_location"
-                                                    required>
-                                                {{--LOAD LOCATION IN MY_PROFILE AT PROVINCES CITY--}}
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-6 pl-5 pb-1">
-                                            <small class="legend">(Maximum 3 locations)</small>
-                                        </div>
+                                        <div class="col-sm-6"></div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -1521,40 +1233,11 @@
                                         <div class="col-sm-6">
                                             <label for="">* Expected Job Level</label>
                                         </div>
-                                        <div class="col-sm-6 p-4">
-                                            <select class="js-example-basic-multiple" name="states[]"
-                                                    multiple="multiple"
-                                                    style="width: 100%" aria-required="true"
-                                                    id="select_expected_job_category"
-                                                    required>
-                                                @if(count($job_category) > 0)
-                                                    @foreach($job_category as $job_category)
-                                                        <option value="{{$job_category->name_job_category}}">{{$job_category->name_job_category}}</option>
-                                                    @endforeach
-                                                @endif
-
-                                            </select>
-                                            <div class="col-sm-6 pl-3 pb-1">
-                                                <small class="legend">(Maximum 3 category)</small>
-                                            </div>
+                                        <div class="col-sm-6 p-5"><h5
+                                                    id="expect_job_category_view">{{$working_preferences->expected_job_category}}</h5>
                                         </div>
-                                        <div class="col-sm-6 pt-4">
-                                            <select class="form-control" id="select_expected_job_level"
-                                                    style="height: auto">
-                                                <option class="form-select" value="-1">Please select ...</option>
-
-                                                @if(count($job_level) > 0)
-                                                    @foreach($job_level as $job_lev)
-                                                        @if($working_preferences->expected_job_level == $job_lev->name)
-                                                            <option class="form-select" value="{{$job_lev->name}}"
-                                                                    selected>{{$job_lev->name}}</option>
-                                                        @else
-                                                            <option class="form-select"
-                                                                    value="{{$job_lev->name}}">{{$job_lev->name}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                        <div class="col-sm-6 p-5"><h5
+                                                    id="expect_job_level_view">{{$working_preferences->expected_job_level}}</h5>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -1564,262 +1247,640 @@
                                         <div class="col-sm-6">
                                             <label for=""></label>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control" placeholder="e.g. 5000"
-                                                   id="expected_salary"
-                                                   value="{{$working_preferences->expected_salary}}"/>
+                                        <div class="col-sm-6 m-4"><h5
+                                                    id="expect_job_salary_view">{{$working_preferences->expected_salary}}</h5>
                                         </div>
                                         <div class="col-sm-6"></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-12 p-4">
+                                        <div class="col-sm-12">
                                             <label for="">* My Top 5 Desired Benefits</label>
                                         </div>
                                     </div>
-                                    <div class="row m-1">
-                                        <div class="col-sm-4">
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-default" id="Awards"
-                                                       value="Awards"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Awards" class="[ btn btn-default active ]">
-                                                        Awards
-                                                    </label>
-                                                    <label for="fancy-checkbox-default" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
+                                    <div class="row m-2 p-4" style="border: 1px dashed">
+                                        <div class="col-sm-12" id="wrap_benefits">
+                                            <input type="text" id="expected_benefits_results"
+                                                   value="{{$working_preferences->expected_benefits}}" hidden>
 
+                                            <div class="col-sm-4">
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-default"
+                                                           id="Awards_View"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Awards_View" class="[ btn btn-default active ]">
+                                                            Awards
+                                                        </label>
+                                                        <label for="fancy-checkbox-default" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-primary" id="Bonus_View"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Bonus_View" class="[ btn btn-default active ]">
+                                                            Bonus
+                                                        </label>
+                                                        <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-success"
+                                                           id="Canteen_View"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Canteen_View" class="[ btn btn-default active ]">
+                                                            Canteen
+                                                        </label>
+                                                        <label for="fancy-checkbox-success" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-info"
+                                                           id="Health_Care_View"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Health_Care_View"
+                                                               class="[ btn btn-default active ]">
+                                                            Healthcare Plan
+                                                        </label>
+                                                        <label for="fancy-checkbox-info" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-danger"
+                                                           id="Kindergarten_View"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+
+                                                        <label for="Kindergarten_View"
+                                                               class="[ btn btn-default active ]">
+                                                            Kindergarten
+                                                        </label>
+                                                        <label for="fancy-checkbox-danger" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-primary" id="Bonus"
-                                                       value="Bonus"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Bonus" class="[ btn btn-default active ]">
-                                                        Bonus
-                                                    </label>
-                                                    <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
+                                            <div class="col-sm-4">
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-default"
+                                                           id="Laptop_View"
+                                                           value="Laptop"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Laptop_View" class="[ btn btn-default active ]">
+                                                            Laptop
+                                                        </label>
+                                                        <label for="fancy-checkbox-default" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
 
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-danger"
+                                                           id="Library_View"
+                                                           value="Library"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+
+                                                        <label for="Library_View" class="[ btn btn-default active ]">
+                                                            Library
+                                                        </label>
+                                                        <label for="fancy-checkbox-danger" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-primary"
+                                                           id="Mobile_View"
+                                                           value="Mobile"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Mobile_View" class="[ btn btn-default active ]">
+                                                            Mobile
+                                                        </label>
+                                                        <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-success"
+                                                           id="Paid_Leave_View"
+                                                           value="Paid_Leave"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Paid_Leave_View" class="[ btn btn-default active ]">
+                                                            Paid Leave
+                                                        </label>
+                                                        <label for="fancy-checkbox-success" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-info"
+                                                           id="Team_Activity_View"
+                                                           value="Team_Activity"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Team_Activity_View"
+                                                               class="[ btn btn-default active ]">
+                                                            Team Activities
+                                                        </label>
+                                                        <label for="fancy-checkbox-info" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-success" id="Canteen"
-                                                       value="Canteen"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Canteen" class="[ btn btn-default active ]">
-                                                        Canteen
-                                                    </label>
-                                                    <label for="fancy-checkbox-success" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
+                                            <div class="col-sm-4">
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-default"
+                                                           id="Training_View"
+                                                           value="Training"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Training_View" class="[ btn btn-default active ]">
+                                                            Training
+                                                        </label>
+                                                        <label for="fancy-checkbox-default" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
 
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-primary"
+                                                           id="Transportation_View"
+                                                           value="Transportation"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Transportation_View"
+                                                               class="[ btn btn-default active ]">
+                                                            Transportation
+                                                        </label>
+                                                        <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-success"
+                                                           id="Travel_Opportunities_View" value="Travel_Opportunities"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Travel_Opportunities_View"
+                                                               class="[ btn btn-default active ]">
+                                                            Travel Opportunities
+                                                        </label>
+                                                        <label for="fancy-checkbox-success" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="[ form-group ]">
+                                                    <input type="checkbox" name="fancy-checkbox-info" id="Vouchers_View"
+                                                           value="Vouchers"
+                                                           autocomplete="off" disabled/>
+                                                    <div class="[ btn-group ]">
+                                                        <label for="Vouchers_View" class="[ btn btn-default active ]">
+                                                            Vouchers
+                                                        </label>
+                                                        <label for="fancy-checkbox-info" class="[ btn btn-info ]">
+                                                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                            <span> </span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-info" id="Health_Care"
-                                                       value="Health_Care"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Health_Care" class="[ btn btn-default active ]">
-                                                        Healthcare Plan
-                                                    </label>
-                                                    <label for="fancy-checkbox-info" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
 
-
-                                                </div>
-                                            </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-danger" id="Kindergarten"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-
-                                                    <label for="Kindergarten" class="[ btn btn-default active ]">
-                                                        Kindergarten
-                                                    </label>
-                                                    <label for="fancy-checkbox-danger" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-
-                                                </div>
-                                            </div>
                                         </div>
-                                        <div class="col-sm-4">
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-default" id="Laptop"
-                                                       value="Laptop"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Laptop" class="[ btn btn-default active ]">
-                                                        Laptop
-                                                    </label>
-                                                    <label for="fancy-checkbox-default" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
 
-                                                </div>
-                                            </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-danger" id="Library"
-                                                       value="Library"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-
-                                                    <label for="Library" class="[ btn btn-default active ]">
-                                                        Library
-                                                    </label>
-                                                    <label for="fancy-checkbox-danger" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-
-                                                </div>
-                                            </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-primary" id="Mobile"
-                                                       value="Mobile"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Mobile" class="[ btn btn-default active ]">
-                                                        Mobile
-                                                    </label>
-                                                    <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-
-                                                </div>
-                                            </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-success" id="Paid_Leave"
-                                                       value="Paid_Leave"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Paid_Leave" class="[ btn btn-default active ]">
-                                                        Paid Leave
-                                                    </label>
-                                                    <label for="fancy-checkbox-success" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-
-                                                </div>
-                                            </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-info" id="Team_Activity"
-                                                       value="Team_Activity"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Team_Activity" class="[ btn btn-default active ]">
-                                                        Team Activities
-                                                    </label>
-                                                    <label for="fancy-checkbox-info" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-default" id="Training"
-                                                       value="Training"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Training" class="[ btn btn-default active ]">
-                                                        Training
-                                                    </label>
-                                                    <label for="fancy-checkbox-default" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-
-                                                </div>
-                                            </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-primary" id="Transportation"
-                                                       value="Transportation"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Transportation" class="[ btn btn-default active ]">
-                                                        Transportation
-                                                    </label>
-                                                    <label for="fancy-checkbox-primary" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-
-                                                </div>
-                                            </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-success"
-                                                       id="Travel_Opportunities" value="Travel_Opportunities"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Travel_Opportunities"
-                                                           class="[ btn btn-default active ]">
-                                                        Travel Opportunities
-                                                    </label>
-                                                    <label for="fancy-checkbox-success" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-
-                                                </div>
-                                            </div>
-                                            <div class="[ form-group ]">
-                                                <input type="checkbox" name="fancy-checkbox-info" id="Vouchers"
-                                                       value="Vouchers"
-                                                       autocomplete="off"/>
-                                                <div class="[ btn-group ]">
-                                                    <label for="Vouchers" class="[ btn btn-default active ]">
-                                                        Vouchers
-                                                    </label>
-                                                    <label for="fancy-checkbox-info" class="[ btn btn-info ]">
-                                                        <span class="[ glyphicon glyphicon-ok ]"></span>
-                                                        <span> </span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <!-- Modal Footer -->
-                            <div class="modal-footer">
-                                <div class="col-sm-12 mr-5">
-                                    <div class="col-sm-6 text-left">
-                                        (<strong class="text-red">*</strong>) is required field
-                                    </div>
-                                    <div class="col-sm-6 text-right">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                        </button>
-                                        <button type="button" class="btn btn-primary submitBtn"
-                                                onclick="submitWorkingPreferencesForm()">
-                                            Save
-                                        </button>
                                     </div>
                                 </div>
                             </div>
+                            {{--Modal Edit Working Preferences--}}
+                            <div class="modal fade" id="modalFormWorkingPreferences" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Working Preferences</h4>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                <span aria-hidden="true">&times;</span>
+                                                <span class="sr-only">Close</span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="modal-body">
+                                            <p class="statusMsg"></p>
+                                            <form role="form" method="POST">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label for="">* Preferred Working Location</label>
+                                                    </div>
+                                                    <div class="col-sm-6 text-right pr-5">
+                                                    </div>
+                                                    <div class="col-sm-12 m-1">
+                                                        <select class="js-example-basic-multiple" name="states[]"
+                                                                multiple="multiple"
+                                                                style="width: 100%" aria-required="true"
+                                                                id="select_working_location"
+                                                                required>
+                                                            {{--LOAD LOCATION IN MY_PROFILE AT PROVINCES CITY--}}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-6 pl-5 pb-1">
+                                                        <small class="legend">(Maximum 3 locations)</small>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label for="">* Expected Job Category</label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label for="">* Expected Job Level</label>
+                                                    </div>
+                                                    <div class="col-sm-6 p-4">
+                                                        <select class="js-example-basic-multiple" name="states[]"
+                                                                multiple="multiple"
+                                                                style="width: 100%" aria-required="true"
+                                                                id="select_expected_job_category"
+                                                                required>
+                                                            @if(count($job_category) > 0)
+                                                                @foreach($job_category as $job_category)
+                                                                    <option value="{{$job_category->name_job_category}}">{{$job_category->name_job_category}}</option>
+                                                                @endforeach
+                                                            @endif
+
+                                                        </select>
+                                                        <div class="col-sm-6 pl-3 pb-1">
+                                                            <small class="legend">(Maximum 3 category)</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 pt-4">
+                                                        <select class="form-control" id="select_expected_job_level"
+                                                                style="height: auto">
+                                                            <option class="form-select" value="-1">Please select ...
+                                                            </option>
+
+                                                            @if(count($job_level) > 0)
+                                                                @foreach($job_level as $job_lev)
+                                                                    @if($working_preferences->expected_job_level == $job_lev->name)
+                                                                        <option class="form-select"
+                                                                                value="{{$job_lev->name}}"
+                                                                                selected>{{$job_lev->name}}</option>
+                                                                    @else
+                                                                        <option class="form-select"
+                                                                                value="{{$job_lev->name}}">{{$job_lev->name}}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label for="">* Expected Salary (USD per month)</label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label for=""></label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="e.g. 5000"
+                                                               id="expected_salary"
+                                                               value="{{$working_preferences->expected_salary}}"/>
+                                                    </div>
+                                                    <div class="col-sm-6"></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 p-4">
+                                                        <label for="">* My Top 5 Desired Benefits</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row m-1">
+                                                    <div class="col-sm-4">
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-default"
+                                                                   id="Awards"
+                                                                   value="Awards"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Awards" class="[ btn btn-default active ]">
+                                                                    Awards
+                                                                </label>
+                                                                <label for="fancy-checkbox-default"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-primary"
+                                                                   id="Bonus"
+                                                                   value="Bonus"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Bonus" class="[ btn btn-default active ]">
+                                                                    Bonus
+                                                                </label>
+                                                                <label for="fancy-checkbox-primary"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-success"
+                                                                   id="Canteen"
+                                                                   value="Canteen"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Canteen" class="[ btn btn-default active ]">
+                                                                    Canteen
+                                                                </label>
+                                                                <label for="fancy-checkbox-success"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-info"
+                                                                   id="Health_Care"
+                                                                   value="Health_Care"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Health_Care"
+                                                                       class="[ btn btn-default active ]">
+                                                                    Healthcare Plan
+                                                                </label>
+                                                                <label for="fancy-checkbox-info"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-danger"
+                                                                   id="Kindergarten"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+
+                                                                <label for="Kindergarten"
+                                                                       class="[ btn btn-default active ]">
+                                                                    Kindergarten
+                                                                </label>
+                                                                <label for="fancy-checkbox-danger"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-default"
+                                                                   id="Laptop"
+                                                                   value="Laptop"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Laptop" class="[ btn btn-default active ]">
+                                                                    Laptop
+                                                                </label>
+                                                                <label for="fancy-checkbox-default"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-danger"
+                                                                   id="Library"
+                                                                   value="Library"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+
+                                                                <label for="Library" class="[ btn btn-default active ]">
+                                                                    Library
+                                                                </label>
+                                                                <label for="fancy-checkbox-danger"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-primary"
+                                                                   id="Mobile"
+                                                                   value="Mobile"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Mobile" class="[ btn btn-default active ]">
+                                                                    Mobile
+                                                                </label>
+                                                                <label for="fancy-checkbox-primary"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-success"
+                                                                   id="Paid_Leave"
+                                                                   value="Paid_Leave"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Paid_Leave"
+                                                                       class="[ btn btn-default active ]">
+                                                                    Paid Leave
+                                                                </label>
+                                                                <label for="fancy-checkbox-success"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-info"
+                                                                   id="Team_Activity"
+                                                                   value="Team_Activity"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Team_Activity"
+                                                                       class="[ btn btn-default active ]">
+                                                                    Team Activities
+                                                                </label>
+                                                                <label for="fancy-checkbox-info"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-default"
+                                                                   id="Training"
+                                                                   value="Training"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Training"
+                                                                       class="[ btn btn-default active ]">
+                                                                    Training
+                                                                </label>
+                                                                <label for="fancy-checkbox-default"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-primary"
+                                                                   id="Transportation"
+                                                                   value="Transportation"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Transportation"
+                                                                       class="[ btn btn-default active ]">
+                                                                    Transportation
+                                                                </label>
+                                                                <label for="fancy-checkbox-primary"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-success"
+                                                                   id="Travel_Opportunities"
+                                                                   value="Travel_Opportunities"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Travel_Opportunities"
+                                                                       class="[ btn btn-default active ]">
+                                                                    Travel Opportunities
+                                                                </label>
+                                                                <label for="fancy-checkbox-success"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="[ form-group ]">
+                                                            <input type="checkbox" name="fancy-checkbox-info"
+                                                                   id="Vouchers"
+                                                                   value="Vouchers"
+                                                                   autocomplete="off"/>
+                                                            <div class="[ btn-group ]">
+                                                                <label for="Vouchers"
+                                                                       class="[ btn btn-default active ]">
+                                                                    Vouchers
+                                                                </label>
+                                                                <label for="fancy-checkbox-info"
+                                                                       class="[ btn btn-info ]">
+                                                                    <span class="[ glyphicon glyphicon-ok ]"></span>
+                                                                    <span> </span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <!-- Modal Footer -->
+                                        <div class="modal-footer">
+                                            <div class="col-sm-12 mr-5">
+                                                <div class="col-sm-6 text-left">
+                                                    (<strong class="text-red">*</strong>) is required field
+                                                </div>
+                                                <div class="col-sm-6 text-right">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary submitBtn"
+                                                            onclick="submitWorkingPreferencesForm()">
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{--Modal Edit Working Preferences--}}
                         </div>
-                    </div>
-                </div>
-                {{--Modal Edit Working Preferences--}}
-            </div>{{--End  Working Preferences --}}
+                    @endforeach
+                @endif
+            @endif{{--End  Working Preferences --}}
         </div>{{--End Container--}}
 
 

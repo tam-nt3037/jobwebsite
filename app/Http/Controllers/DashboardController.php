@@ -25,26 +25,14 @@ class DashboardController extends Controller
     {
         $this->middleware('auth');
 
-
-
         $saved_jobs = DB::table('saved_jobs')->get();
-        $post_news_for_saved_jobs = DB::table('post_news')
-            ->join('saved_jobs','post_news.id_posts','=','saved_jobs.id_post_news')
-            ->join('recruiter','recruiter.id_account_recruiter','=','post_news.id_account_recruiter')
-            ->select('post_news.*','recruiter.*')
-            ->paginate(5);
 
-        $post_news_for_applied_jobs = DB::table('status_candidate_profile')
-            ->join('post_news','post_news.id_posts','=','status_candidate_profile.id_post_news')
-            ->join('recruiter','recruiter.id_account_recruiter','=','status_candidate_profile.id_account_recruiter')
-            ->select('status_candidate_profile.*','post_news.job_title','post_news.time_for_submission','recruiter.company_name')
-            ->paginate(5);
+
+
 
         // Sharing is caring
         View::share(compact(
-            'saved_jobs',
-            'post_news_for_saved_jobs',
-            'post_news_for_applied_jobs'
+            'saved_jobs'
         ));
     }
 
@@ -53,8 +41,24 @@ class DashboardController extends Controller
         $id_candidate = auth()->user()->id; //Get uid
         $info_candidate_profile = Info_candidate::where('id_users', $id_candidate)->get();
 
+        $post_news_for_saved_jobs = DB::table('post_news')
+            ->join('saved_jobs','post_news.id_posts','=','saved_jobs.id_post_news')
+            ->join('recruiter','recruiter.id_account_recruiter','=','post_news.id_account_recruiter')
+            ->where('id_candidate','=',$id_candidate)
+            ->select('post_news.*','recruiter.*')
+            ->paginate(5);
+
+        $post_news_for_applied_jobs = DB::table('status_candidate_profile')
+            ->join('post_news','post_news.id_posts','=','status_candidate_profile.id_post_news')
+            ->join('recruiter','recruiter.id_account_recruiter','=','status_candidate_profile.id_account_recruiter')
+            ->where('id_candidate','=',$id_candidate)
+            ->select('status_candidate_profile.*','post_news.job_title','post_news.time_for_submission','recruiter.company_name')
+            ->paginate(5);
+
         return view('dashboard.dashboard')->with(compact(
-            'info_candidate_profile'
+            'info_candidate_profile',
+                'post_news_for_saved_jobs',
+                   'post_news_for_applied_jobs'
         ));
     }
 
