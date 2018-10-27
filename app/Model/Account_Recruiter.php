@@ -15,6 +15,6 @@ class Account_Recruiter extends Model
 
     public function post_news()
     {
-        return $this->hasMany('App\Model\Post_News');
+        return $this->hasMany(Post_News::class);
     }
 }

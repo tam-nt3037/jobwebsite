@@ -12,4 +12,6 @@ class Info_candidate extends Model
     public $primaryKey = 'id';
     // Timestamps
     public $timestamps = true;
+
+
 }
