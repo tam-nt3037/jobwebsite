@@ -45,6 +45,7 @@ class DashboardController extends Controller
             ->join('saved_jobs','post_news.id_posts','=','saved_jobs.id_post_news')
             ->join('recruiter','recruiter.id_account_recruiter','=','post_news.id_account_recruiter')
             ->where('id_candidate','=',$id_candidate)
+            ->where('post_news.status_post','=',1)
             ->select('post_news.*','recruiter.*')
             ->paginate(5);
 
