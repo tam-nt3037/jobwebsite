@@ -295,19 +295,11 @@
                                     {!! $post->benefit !!}
                                 </p>
                             </div>
-                            <div class="single-post job-details">
-                                <h4 class="single-title">Whom we are looking for</h4>
-                                <p>
-                                    <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                    <span>{{$post->description_work}}</span>
-                                </p>
-                            </div>
                             <div class="single-post job-experience">
                                 <h4 class="single-title">Job Requirements</h4>
                                 <ul>
                                     <li>
-                                        <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                        <span>{{$post->require_work}}</span>
+                                        <span>{!! $post->require_work !!}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -329,15 +321,7 @@
                             {{--</li>--}}
                             {{--</ul>--}}
                             {{--</div>--}}
-                            <div class="single-post job-experience">
-                                <h4 class="single-title">Education Requirements</h4>
-                                <ul>
-                                    <li>
-                                        <img src="{{ asset('img/pages/list.jpg') }}" alt="">
-                                        <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaut enim ad minim veniam.</span>
-                                    </li>
-                                </ul>
-                            </div>
+
                             {{--<div class="single-post job-experience">--}}
                             {{--<h4 class="single-title">Profile Requirements</h4>--}}
                             {{--<ul>--}}
