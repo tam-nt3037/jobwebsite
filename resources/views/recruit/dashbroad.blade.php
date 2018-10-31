@@ -424,9 +424,11 @@
                                 alert('No have job, create now :)')
                             } else {
                                 $.each(result.result, function (i, e) {
+
+
                                     var html = ' <tr class="item">'
                                         + '<div class="row">'
-                                        + '<td class="col-md-1" style=" text-align:center;">{{$applied}}</td>'
+                                        + '<td class="col-md-1" style=" text-align:center;">'+i+'</td>'
                                         + '<td class="col-md-3" style=" text-align:center;">'
                                         + '<a data-toggle="modal" data-target="#overView' + e.id_posts + '">' + e.job_title + '</a>'
                                         + '</td>'
@@ -442,8 +444,8 @@
                                         + '</div>'
                                         + '</tr>';
 
-                                    $('.table tbody').append(html);
 
+                                    $('.table tbody').append(html);
                                 });
                             }
 

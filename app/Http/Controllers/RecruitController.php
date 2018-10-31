@@ -593,6 +593,7 @@ class RecruitController extends Controller
         $result = Post_News::leftJoin('status_candidate_profile', 'status_candidate_profile.id_post_news', 'post_news.id_posts')
             ->where('post_news.job_title', 'like', '%' . $search . '%')
             ->where('post_news.id_account_recruiter', '=', $recruitId)
+            ->where('post_news.status_post', '=', 1)
             ->orderBy('post_news.created_at', 'desc')
             ->select('post_news.id_posts', 'post_news.job_title', 'post_news.created_at')
             ->groupBy('post_news.job_title')
